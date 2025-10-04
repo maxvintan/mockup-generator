@@ -1,0 +1,125 @@
+:root {
+    --brand-gold: #dac25a;
+    --text-primary: #ccc1aa;
+    --text-white: #ffffff;
+    --bg-main: #000000;
+    --bg-card: #1c2833;
+    --bg-control: #2d3748;
+    --border-color: #4a5568;
+    --border-hover: #718096;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+}
+
+.font-calistoga {
+    font-family: 'Calistoga', serif;
+}
+
+.loader {
+    border: 4px solid var(--border-color);
+    border-radius: 50%;
+    border-top: 4px solid var(--brand-gold);
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-card);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border-hover);
+}
+
+.custom-select-container {
+    position: relative;
+}
+
+.custom-select-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--bg-control);
+    border: 1px solid var(--border-color);
+    color: var(--text-white);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.custom-select-button:disabled {
+    background-color: #1a202c;
+    color: #718096;
+    cursor: not-allowed;
+}
+
+.custom-select-button:focus, .custom-select-button:hover:not(:disabled) {
+    border-color: var(--brand-gold);
+    outline: none;
+}
+
+.custom-select-options {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    margin-top: 0.25rem;
+    border-radius: 0.5rem;
+    background-color: var(--bg-control);
+    border: 1px solid var(--border-color);
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.custom-select-option {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+.custom-select-option:hover, .custom-select-option.selected {
+    background-color: var(--border-color);
+    color: var(--text-white);
+}
+
+.color-swatch {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    border: 1px solid var(--border-color);
+}
+
+.chevron-down {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--text-primary);
+    transition: transform 0.2s;
+}
