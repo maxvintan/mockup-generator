@@ -2,8 +2,6 @@
 
 A sophisticated web-based mockup prompt generator for fashion and accessory design. Create AI-powered design prompts with customizable colors, aesthetics, countries, designers, and creative modes. Features advanced AI model selection through OpenRouter API with intelligent filtering and cost estimation.
 
-(https://assets.zyrosite.com/mePvQZQyOMTq15Xq/mockup-generator-github-AzGM409PkBUJX9XX.jpg)
-
 ![Version](https://img.shields.io/badge/version-3.0-blue.svg)
 ![Last Updated](https://img.shields.io/badge/last_updated-October_7,_2025-green.svg)
 
