@@ -215,15 +215,28 @@ export const countries = {
       "Anita Dongre",
     ],
   },
-  Indonesia: {
-    code: "id",
-    designers: [
+  "Indonesia": {
+    "code": "id",
+    "designers": [
       "Tex Saverio",
       "Biyan Wanaatmadja",
       "Toton Januar",
       "Lulu Lutfi Labibi",
       "Rinaldy Yunardi",
-    ],
+      "Anne Avantie",
+      "Sebastian Gunawan",
+      "Didit Hediprasetyo",
+      "Dian Pelangi",
+      "Peggy Hartanto",
+      "Sapto Djojokartiko",
+      "Hian Tjen",
+      "Didiet Maulana",
+      "Ivan Gunawan",
+      "Hengki Kawilarang",
+      "Monica Ivena",
+      "Ria Miranda",
+      "Tities Sapoetra"
+    ]
   },
   Italy: {
     code: "it",
