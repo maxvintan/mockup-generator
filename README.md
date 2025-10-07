@@ -5,6 +5,8 @@ A sophisticated web-based mockup prompt generator for fashion and accessory desi
 ![Version](https://img.shields.io/badge/version-3.0-blue.svg)
 ![Last Updated](https://img.shields.io/badge/last_updated-October_7,_2025-green.svg)
 
+![Preview of the GitHub repository layout with screenshot](https://assets.zyrosite.com/mePvQZQyOMTq15Xq/mockup-generator-github-AzGM409PkBUJX9XX.jpg)
+
 ## Overview
 
 The Mockup Generator is a powerful web application that helps designers and creators generate structured JSON prompts for fashion and accessory mockups. Built with modern web technologies, it provides an intuitive interface for customizing design parameters and generating AI-ready prompts.
