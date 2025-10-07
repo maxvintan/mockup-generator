@@ -109,6 +109,78 @@ body {
     color: var(--text-white);
 }
 
+.model-card {
+    background-color: var(--bg-control);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.model-card:hover {
+    border-color: var(--brand-gold);
+    box-shadow: 0 0 10px rgba(218, 194, 90, 0.3);
+}
+
+.model-card.selected {
+    border-color: var(--brand-gold);
+    background-color: rgba(218, 194, 90, 0.1);
+}
+
+.model-card .provider-badge {
+    background-color: var(--brand-gold);
+    color: black;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.model-card .model-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-white);
+    margin-bottom: 0.5rem;
+}
+
+.model-card .context-bar {
+    background-color: var(--bg-main);
+    height: 4px;
+    border-radius: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.model-card .context-bar-fill {
+    height: 100%;
+    background-color: var(--brand-gold);
+    border-radius: 2px;
+}
+
+.model-card .pricing {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.model-card .capabilities {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.model-card .capability-tag {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.125rem;
+    font-weight: 500;
+}
+
+/* Removed cost-estimate styles */
+
 .color-swatch {
     width: 1rem;
     height: 1rem;

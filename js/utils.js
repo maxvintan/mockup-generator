@@ -102,26 +102,72 @@ export function buildPrompts(context, colorOptions) {
         : "The 'theme_name' MUST be in English.";
 
     const baseTemplate = {
-        theme_name: "{{creative_theme_name}}",
-        theme_name_romanized: "{{romanized_version_for_filename}}",
-        subject: { type: context.fullProductType, structure: "{{creative_structure_description}}", main_body: { material: "polyester canvas fabric, oxford weave", color_scheme: { primary_panel: "", accent_panel: "" } } },
-        design_details: { hardware: { material: "{{hardware_material}}", components: "{{hardware_components}}", finish: "{{hardware_finish}}" }, stitching: { thread_color: "{{stitching_thread_color}}", style: "{{stitching_style}}" } },
-        branding: { logo_text: "SIGNIFO", font: "{{logo_font}}", material: "shimmering, reflective metallic gold (#dbc35b)", application: "{{logo_application}}", location: "{{logo_location}}" },
-        composition: { view: "{{photo_view_angle}}", focus: "sharp focus on stitching and woven polyester canvas fabric surface, background softly blurred" },
-        environment: { background: { type: "seamless studio background", color_hex: "#FFFFFF" }, lighting: { type: "soft studio lighting", effect: "evenly illuminating the fabric and emphasizing the woven canvas texture" } },
-        style: { photography: "High-end product photography, highlighting the woven polyester canvas texture with subtle light reflections.", feel: "{{style_feel}}", aspect_ratio: "1:1", realism: "2K, ultra-detailed, photorealistic." }
+        metadata: {
+            theme_name: "{{creative_theme_name}}",
+            theme_name_romanized: "{{romanized_version_for_filename}}"
+        },
+        product: {
+            type: context.fullProductType,
+            structure: "{{creative_structure_description}}",
+            material: "polyester canvas fabric, oxford weave",
+            color_scheme: {
+                primary_panel: "",
+                accent_panel: ""
+            }
+        },
+        design: {
+            hardware: {
+                material: "{{hardware_material}}",
+                components: "{{hardware_components}}",
+                finish: "{{hardware_finish}}"
+            },
+            stitching: {
+                thread_color: "{{stitching_thread_color}}",
+                style: "{{stitching_style}}"
+            }
+        },
+        branding: {
+            logo_text: "SIGNIFO",
+            font: "{{logo_font}}",
+            material: "shimmering, reflective metallic gold (#dbc35b)",
+            application: "{{logo_application}}",
+            location: "{{logo_location}}"
+        },
+        photography: {
+            composition: {
+                view: "{{photo_view_angle}}",
+                focus: "sharp focus on stitching and woven polyester canvas fabric surface, background softly blurred"
+            },
+            environment: {
+                background: {
+                    type: "seamless studio background",
+                    color_hex: "#FFFFFF"
+                },
+                lighting: {
+                    type: "soft studio lighting",
+                    effect: "evenly illuminating the fabric and emphasizing the woven canvas texture"
+                }
+            },
+            style: {
+                photography: "High-end product photography, highlighting the woven polyester canvas texture with subtle light reflections.",
+                feel: "{{style_feel}}",
+                aspect_ratio: "1:1",
+                realism: "2K, ultra-detailed, photorealistic."
+            }
+        }
     };
 
     const creativeConstraints = `
 CREATIVE CONSTRAINTS FOR ENHANCED ORIGINALITY:
-- Theme names should be evocative, poetic, and create emotional resonance
-- Draw inspiration from art movements, nature, architecture, and cultural references
-- Create unexpected but harmonious color combinations from the SIGNIFO palette
-- Design details should showcase innovative thinking about canvas applications
-- Photography concepts should highlight the unique texture of oxford weave
-- Hardware choices should complement the canvas material in unexpected ways
-- Think about how to make polyester canvas feel luxurious and premium
-- Incorporate storytelling elements that create a narrative around the product
+- Theme names should be evocative, poetic, and create emotional resonance from combining color palettes with structural elements, hardware choices, and stitching patterns
+- Draw inspiration from art movements, nature, architecture, cultural references, and the product's complete design language
+- Create unexpected but harmonious combinations across all design elements (structure, colors, hardware, stitching)
+- Design details should showcase innovative thinking about how canvas structure, hardware materials, and stitching styles work together
+- Photography concepts should highlight the unique interplay of woven canvas fabric texture, hardware details, and stitching patterns
+- Hardware choices should complement the canvas material and chosen structure in unexpected ways
+- Think about how to make polyester canvas feel luxurious and premium through integrated design elements
+- Incorporate storytelling elements that tie together the product structure, hardware, and finishing details
+- Theme names should reflect this integrated design approach rather than focusing on colors alone
 `;
 
     const fictionModeConstraints = `
@@ -176,9 +222,9 @@ HISTORICAL MODE - ANCIENT & HISTORICAL INSPIRATION:
     };
 
     const themeNameRules = `
-        - For 'theme_name': It must be creative, evocative, and max 4 words. ${themeLanguageInstruction}
+        - For 'theme_name': It must be creative, evocative, and max 4 words. Incorporate elements from product structure, hardware design, stitching details, and color schemes to create holistic themes that reflect the complete product concept. ${themeLanguageInstruction}
         - For 'theme_name_romanized': It MUST be the direct Romanized (Latin alphabet) equivalent of the 'theme_name'. Spaces between words are required. Do not use symbols.
-        - Theme names should be poetic, memorable, and create emotional connections
+        - Theme names should be poetic, memorable, and create emotional connections. Draw inspiration from art movements, nature, architecture, cultural references, and the product's physical characteristics.
     `;
 
     // Add creative mode constraints based on selected mode
@@ -214,9 +260,9 @@ RULES:
 6. The output MUST be only the completed JSON object.`;
 
         const themeTemplate = { ...baseTemplate };
-        themeTemplate.aesthetic = context.aesthetic;
-        themeTemplate.subject.main_body.color_scheme = { primary_panel: "{{chosen_primary_color_from_palette}}", accent_panel: "{{chosen_accent_color_from_palette_or_empty}}" };
-        themeTemplate.style.feel = "{{style_feel_that_matches_the_aesthetic}}";
+        themeTemplate.metadata.aesthetic = context.aesthetic;
+        themeTemplate.product.color_scheme = { primary_panel: "{{chosen_primary_color_from_palette}}", accent_panel: "{{chosen_accent_color_from_palette_or_empty}}" };
+        themeTemplate.photography.style.feel = "{{style_feel_that_matches_the_aesthetic}}";
         
         const userPrompt = `SIGNIFO Color Palette: [${colorListString}]. Create an exceptionally creative and original concept for a "${context.fullProductType}" inspired by the "${context.aesthetic}" aesthetic. ${creativeModeContext || 'Think about how this aesthetic can be expressed through polyester canvas in innovative ways.'} Template: ${JSON.stringify(themeTemplate)}`;
         return { systemPrompt, userPrompt };
@@ -246,7 +292,7 @@ RULES:
         const cleanAccent = cleanColorName(context.accentColor);
 
         const customTemplate = { ...baseTemplate };
-        customTemplate.subject.main_body.color_scheme = { primary_panel: context.primaryColor, accent_panel: context.accentColor };
+        customTemplate.product.color_scheme = { primary_panel: context.primaryColor, accent_panel: context.accentColor };
 
         let creativeContext = '';
         if (context.creativeMode === 'fiction') {

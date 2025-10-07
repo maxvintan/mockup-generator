@@ -1,9 +1,9 @@
 # Mockup Generator
 
-A sophisticated web-based mockup prompt generator for fashion and accessory design. Create AI-powered design prompts with customizable colors, aesthetics, countries, designers, and creative modes. Supports Deepseek and OpenRouter models.
+A sophisticated web-based mockup prompt generator for fashion and accessory design. Create AI-powered design prompts with customizable colors, aesthetics, countries, designers, and creative modes. Features advanced AI model selection through OpenRouter API with intelligent filtering and cost estimation.
 
-![Version](https://img.shields.io/badge/version-2.0-blue.svg)
-![Last Updated](https://img.shields.io/badge/last_updated-October_4,_2025-green.svg)
+![Version](https://img.shields.io/badge/version-3.0-blue.svg)
+![Last Updated](https://img.shields.io/badge/last_updated-October_7,_2025-green.svg)
 
 ## Overview
 
@@ -23,15 +23,17 @@ The Mockup Generator is a powerful web application that helps designers and crea
 ### 🎯 Design Customization
 - **Color Selection**: 48+ carefully curated colors with hex codes
 - **Primary & Accent Colors**: Automatic color coordination and conflict prevention
-- **Country References**: 20+ countries with flag icons and designer associations
-- **Designer Inspiration**: Access to 100+ international fashion designers
+- **Country References**: 22 countries with flag icons and designer associations
+- **Designer Inspiration**: Access to 150+ international fashion designers across 22 countries
 - **Gender Options**: Automatic, Unisex, Women, Men
-- **Product Categories**: Bags, Footwear, Wallets & Small Goods
-- **Product Types**: 50+ specific product variations
+- **Product Categories**: Bags (20 types), Footwear (18 types), Wallets & Small Goods (17 types)
+- **Product Types**: 55+ specific product variations across all categories
 
 ### 🤖 AI Model Support
-- **Deepseek**: Advanced AI model for prompt generation
-- **OpenRouter**: Flexible model routing through OpenRouter API
+- **OpenRouter**: Advanced AI model routing with 100+ available models
+- **Smart Model Selection**: Filter by capabilities, pricing, and performance
+- **Vision Model Support**: Automatic detection of vision-capable models
+- **Cost Estimation**: Real-time pricing calculation for all models
 
 ### 🎪 Aesthetics Library
 - Art Deco, Avant-Garde, Biomorphic, Bohemian (Boho)
@@ -47,9 +49,10 @@ The Mockup Generator is a powerful web application that helps designers and crea
 3. No additional setup required - it's a pure client-side application
 
 ### API Configuration
-1. Select your preferred AI model (Deepseek or OpenRouter)
-2. Enter your API key in the provided field
-3. Your API key is stored securely in session storage
+1. Enter your OpenRouter API key in the provided field
+2. Verify your key to load available models (100+ options)
+3. Select from models with vision, tools, and various pricing tiers
+4. Your API key is stored securely in session storage
 
 ## Technology Stack
 
@@ -93,6 +96,13 @@ mockup-generator/
 - Support for multiple AI model providers
 - JSON validation and cleaning
 
+### Advanced Model Selection
+- **Intelligent Filtering**: Search by model name, provider, or capabilities
+- **Capability Detection**: Automatic identification of vision and tools support
+- **Performance-Based Sorting**: Mockup-optimized, context length, and pricing-based sorting
+- **Real-Time Cost Preview**: Live calculation of generation costs across different models
+- **Provider Management**: Support for 20+ AI model providers through OpenRouter
+
 ## Usage Examples
 
 ### Custom Build Mode
@@ -134,6 +144,7 @@ This project is part of the SIGNIFO Canvas ecosystem. For contributions or modif
 
 ## Version History
 
+- **v3.0** (October 7, 2025): Complete OpenRouter integration with advanced model selection, cost estimation, vision model support, enhanced filtering capabilities, and expanded product catalog (55+ variations across 22 countries)
 - **v2.0** (October 4, 2025): Major update with enhanced UI, new creative modes, and improved AI integration
 - **v1.0**: Initial release with basic prompt generation capabilities
 

@@ -12,99 +12,88 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+    <div class="container mx-1 md:mx-2 max-w-none">
         <header class="text-center mb-8">
-            <h1 class="font-calistoga text-5xl md:text-6xl font-bold text-[#dac25a]">SIGNIFO®</h1>
+            <h1 class="font-calistoga text-5xl md:text-6xl text-[#dac25a]">SIGNIFO®</h1>
             <p class="text-lg text-white mt-2">Mockup Prompt Generator</p>
             <p class="text-xs text-white mt-4 tracking-[0.2em]"><a href="https://www.signifocanvas.com" target="_blank" class="hover:underline">www.signifocanvas.com</a></p>
         </header>
 
-        <main class="bg-[#1c2833] p-6 md:p-8 rounded-2xl shadow-lg">
-            <div class="space-y-6">
-            
+        <main class="lg:grid lg:grid-cols-5 gap-4 bg-[#1c2833] p-4 md:p-6 rounded-2xl shadow-lg">
+
+            <!-- LEFT CARD: Input Configuration -->
+            <div class="bg-black/20 p-4 rounded-lg space-y-6 lg:col-span-1">
+                <h2 class="text-xl font-semibold text-white mb-6">Configuration</h2>
+
                 <div>
-                    <h2 class="text-2xl font-semibold mb-4 text-white">1. Configure Your Request</h2>
-                    
-                    <div class="mb-6">
-                        <label class="block text-lg font-medium text-[#ccc1aa] mb-3">Generation Mode</label>
-    
-                        <div class="flex items-center space-x-6 bg-black/20 p-3 rounded-lg">
-                            <div class="flex items-center">
-                                <input id="modeCustom" name="mode" type="radio" value="custom" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]" checked>
-                                <label for="modeCustom" class="ml-2 block text-sm text-white">Custom Build</label>
-                            </div>
-                            <div class="flex items-center">
-    
-                                <input id="modeAesthetic" name="mode" type="radio" value="theme" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]">
-                                <label for="modeAesthetic" class="ml-2 block text-sm text-white">Aesthetic-Based</label>
-                        
-                            </div>
+                    <label class="block text-lg font-medium text-[#ccc1aa] mb-3">Generation Mode</label>
+                    <div class="flex items-center space-x-6 bg-black/20 p-3 rounded-lg">
+                        <div class="flex items-center">
+                            <input id="modeCustom" name="mode" type="radio" value="custom" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]" checked>
+                            <label for="modeCustom" class="ml-2 block text-sm text-white">Custom Build</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="modeAesthetic" name="mode" type="radio" value="theme" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]">
+                            <label for="modeAesthetic" class="ml-2 block text-sm text-white">Aesthetic-Based</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-lg font-medium text-[#ccc1aa] mb-3">Creative Mode</label>
+                    <div class="flex items-center space-x-6 bg-black/20 p-3 rounded-lg">
+                        <div class="flex items-center">
+                            <input id="creativeModeNone" name="creativeMode" type="radio" value="none" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]" checked>
+                            <label for="creativeModeNone" class="ml-2 block text-sm text-white">Standard</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="fictionMode" name="creativeMode" type="radio" value="fiction" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]">
+                            <label for="fictionMode" class="ml-2 block text-sm text-white">Fiction Mode</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="historicalMode" name="creativeMode" type="radio" value="historical" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]">
+                            <label for="historicalMode" class="ml-2 block text-sm text-white">Historical Mode</label>
+                        </div>
+                    </div>
+                    <div class="text-xs text-[#ccc1aa] mt-2">
+                        <span id="creativeModeDescription">Standard creative generation</span>
+                    </div>
+                </div>
+
+                <div id="aesthetic_select_container_wrapper" class="hidden my-6 transition-all duration-300">
+                    <label for="aesthetic_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Select an Aesthetic</label>
+                    <div id="aesthetic_select_container" class="custom-select-container"></div>
+                </div>
+
+                <div id="custom_controls_container" class="mt-6">
+                    <div class="grid grid-cols-1 gap-4 mb-4">
+                        <div>
+                            <label for="primary_color_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Primary Color</label>
+                            <div id="primary_color_select" class="custom-select-container"></div>
+                        </div>
+                        <div>
+                           <label for="accent_color_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Accent Color</label>
+                            <div id="accent_color_select" class="custom-select-container"></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 gap-4 mt-4">
+                        <div>
+                            <label for="country_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Country Reference</label>
+                            <div id="country_select_container" class="custom-select-container"></div>
+                        </div>
+                        <div>
+                            <label for="designer_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Designer Reference</label>
+                            <div id="designer_select_container" class="custom-select-container"></div>
                         </div>
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block text-lg font-medium text-[#ccc1aa] mb-3">Creative Mode</label>
-                        <div class="flex items-center space-x-6 bg-black/20 p-3 rounded-lg">
-                            <div class="flex items-center">
-                                <input id="creativeModeNone" name="creativeMode" type="radio" value="none" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]" checked>
-                                <label for="creativeModeNone" class="ml-2 block text-sm text-white">Standard</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input id="fictionMode" name="creativeMode" type="radio" value="fiction" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]">
-                                <label for="fictionMode" class="ml-2 block text-sm text-white">Fiction Mode</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input id="historicalMode" name="creativeMode" type="radio" value="historical" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]">
-                                <label for="historicalMode" class="ml-2 block text-sm text-white">Historical Mode</label>
-                            </div>
-                        </div>
-                        <div class="text-xs text-[#ccc1aa] mt-2">
-                            <span id="creativeModeDescription">Standard creative generation</span>
-                        </div>
-                    </div>
-
-                    <div id="aesthetic_select_container_wrapper" class="hidden mb-6 transition-all duration-300">
-                        <label for="aesthetic_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Select an Aesthetic</label>
-                        <div id="aesthetic_select_container" class="custom-select-container"></div>
-                    </div>
-
-                    <div id="custom_controls_container">
-            
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                            <div>
-                                <label for="primary_color_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Primary Color</label>
-                                <div id="primary_color_select" class="custom-select-container"></div>
-                            </div>
-                            <div>
-                                
-                               <label for="accent_color_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Accent Color</label>
-                                <div id="accent_color_select" class="custom-select-container"></div>
-                            </div>
-                    
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                            <div>
-                                <label for="country_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Country Reference</label>
-                                <div id="country_select_container" class="custom-select-container"></div>
-                            </div>
-                            <div>
-    
-                                <label for="designer_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Designer Reference</label>
-                                <div id="designer_select_container" class="custom-select-container"></div>
-                            </div>
-    
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                    <div class="grid grid-cols-1 gap-4 mt-4">
                         <div>
                             <label for="gender_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Gender</label>
                             <div id="gender_select_container" class="custom-select-container"></div>
-    
                         </div>
                         <div>
                             <label for="product_category_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Product Category</label>
-                            
                            <div id="product_category_select_container" class="custom-select-container"></div>
                         </div>
                     </div>
@@ -112,30 +101,9 @@
                         <label for="product_type_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Product Type</label>
                         <div id="product_type_select_container" class="custom-select-container"></div>
                     </div>
-
-
-                    <div class="mt-6">
-                        <label class="block text-sm font-medium text-[#ccc1aa] mb-2">Select Model</label>
-                        <div class="flex items-center space-x-4 md:space-x-6">
-                            <div class="flex items-center">
-                                <input id="modelDeepSeek" name="model" type="radio" value="deepseek" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]" checked>
-                                <label for="modelDeepSeek" class="ml-2 block text-sm text-white">Deepseek</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input id="modelOpenRouter" name="model" type="radio" value="openrouter" class="h-4 w-4 text-[#dac25a] bg-gray-700 border-gray-600 focus:ring-[#dac25a]">
-                                <label for="modelOpenRouter" class="ml-2 block text-sm text-white">OpenRouter</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="apiKeyContainer" class="mt-4 transition-all duration-300">
-                        <label for="api_key" class="block text-sm font-medium text-[#ccc1aa]">Your API Key</label>
-                        <input type="password" id="api_key" class="mt-1 block w-full rounded-lg bg-gray-800 border-gray-700 text-white shadow-sm focus:border-[#dac25a] focus:ring focus:ring-[#dac25a] focus:ring-opacity-50 disabled:bg-gray-900 disabled:cursor-not-allowed" placeholder="Enter required API key">
-                        <p id="apiKeyMessage" class="mt-2 text-xs text-gray-500">An API key is required for the selected model.</p>
-                    </div>
                 </div>
 
-                <div class="text-center pt-4 flex justify-center items-center gap-4">
+                <div class="pt-6 flex justify-center gap-4">
                     <button id="resetBtn" class="bg-gray-700 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-gray-500 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
                         Reset
                     </button>
@@ -143,41 +111,105 @@
                         Generate Prompt
                     </button>
                 </div>
+            </div>
 
-                <div id="result_area" class="space-y-6">
-                    <div class="pt-6">
-                        <h2 class="text-2xl font-semibold mb-4 text-white">2. The Result</h2>
-                        <p class="text-[#ccc1aa] mb-4">The generated JSON prompt will appear below.</p>
-                        <div id="loader" class="hidden justify-center items-center py-10">
-                            <div class="loader"></div>
-                        </div>
+            <!-- CENTER CARD: AI Model Selection -->
+            <div class="bg-black/20 p-4 rounded-lg space-y-6 lg:col-span-3">
+                <h2 class="text-xl font-semibold text-white mb-6">AI Model Selection</h2>
 
-                        <div id="output" class="relative bg-black text-white p-4 rounded-lg font-mono text-sm overflow-x-auto min-h-[200px] hidden border border-gray-700">
-                            <button id="copyBtn" class="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white py-1 px-3 rounded-md text-xs">Copy</button>
-                            <pre class="whitespace-pre-wrap"><code id="json-output"></code></pre>
-                        </div>
+                <div>
+                    <label for="api_key" class="block text-lg font-medium text-[#ccc1aa] mb-3">OpenRouter API Key</label>
+                    <div class="flex items-center gap-4">
+                        <input type="password" id="api_key" class="block w-full rounded-lg bg-gray-800 border-gray-700 text-white shadow-sm focus:border-[#dac25a] focus:ring focus:ring-[#dac25a] focus:ring-opacity-50" placeholder="Enter your OpenRouter key">
+                        <button id="verifyKeyBtn" class="bg-gray-700 text-white font-bold py-2 px-5 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-gray-500 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                            Verify
+                        </button>
                     </div>
+                    <p id="apiKeyMessage" class="mt-2 text-xs text-gray-500 h-4">Your key is needed to fetch available models.</p>
+                </div>
 
-                    <div id="filename_container" class="pt-2 hidden">
-                        <h2 class="text-2xl font-semibold mb-4 text-white">3. File Name Suggestion</h2>
-                        <p class="text-[#ccc1aa] mb-4">Here is a file-safe version of the theme name, ready to use.</p>
-                        <div class="relative bg-black text-white p-4 rounded-lg font-mono text-sm overflow-x-auto border border-gray-700">
-                            <button id="copyFilenameBtn" class="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white py-1 px-3 rounded-md text-xs">Copy</button>
-                            <code id="filename-output"></code>
-                        </div>
+                <div id="model_controls_wrapper" class="hidden grid grid-cols-1 gap-6">
+                    <div>
+                        <label for="sort_model_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Sort by</label>
+                        <select id="sort_model_select" class="block w-full rounded-lg bg-gray-800 border-gray-700 text-white shadow-sm focus:border-[#dac25a] focus:ring focus:ring-[#dac25a] focus:ring-opacity-50">
+                    <option value="recommended">Recommended</option>
+                    <option value="mockup_optimized">Mockup Optimized</option>
+                    <option value="price_asc">Price: Low to High</option>
+                    <option value="price_desc">Price: High to Low</option>
+                    <option value="context_desc">Context: High to Low</option>
+                    <option value="date_desc">Recently Added</option>
+                        </select>
                     </div>
                 </div>
 
-                <div id="error" class="hidden bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg mt-6" role="alert">
-                    <strong class="font-bold">Error:</strong>
-                    <span class="block sm:inline" id="error-message"></span>
+                <div id="model_select_wrapper" class="hidden mt-4">
+                    <div id="model_controls" class="mb-4 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-[#ccc1aa] mb-2">Search Models</label>
+                            <input id="search_models" type="text" placeholder="Filter by name or ID..." class="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white rounded-md focus:border-[#dac25a] focus:ring-[#dac25a]">
+                        </div>
+                        <div class="flex flex-wrap gap-4">
+                            <label class="flex items-center text-sm text-[#ccc1aa]">
+                                <input type="checkbox" id="filter_free" class="mr-2"> Free Only
+                            </label>
+                            <label class="flex items-center text-sm text-[#ccc1aa]">
+                                <input type="checkbox" id="filter_vision" class="mr-2"> Vision
+                            </label>
+                            <label class="flex items-center text-sm text-[#ccc1aa]">
+                                <input type="checkbox" id="filter_tools" class="mr-2"> Tools
+                            </label>
+                            <div>
+                                <label for="filter_provider_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Provider</label>
+                                <select id="filter_provider_select" class="px-3 py-2 bg-gray-800 border border-gray-700 text-white rounded-md focus:border-[#dac25a] focus:ring-[#dac25a]">
+                                    <option value="all">All Providers</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="model_cards_container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
                 </div>
+            </div>
+
+            <!-- RIGHT CARD: Result Output -->
+            <div class="bg-black/20 p-4 rounded-lg space-y-6 lg:col-span-1">
+                <h2 class="text-xl font-semibold text-white mb-6">Generated Result</h2>
+
+                <div id="loader" class="hidden flex flex-col items-center justify-center py-6">
+                    <div class="loader"></div>
+                    <div class="elapsed-time text-lg font-medium text-white mt-4">0.0s</div>
+                </div>
+
+                <div id="generation_time" class="hidden bg-[#1c2833] border border-gray-600 rounded-lg p-3 mb-4">
+                    <div class="text-sm text-[#ccc1aa] mb-1">Generation Time</div>
+                    <div class="text-xl font-bold text-[#dac25a]">
+                        <span id="generation_time_value"></span>
+                    </div>
+                </div>
+
+                <div id="filename_container" class="hidden">
+                    <h3 class="text-lg font-medium text-white mb-2">File Name Suggestion</h3>
+                    <p class="text-[#ccc1aa] mb-2 text-xs">Based on generated theme name</p>
+                    <div class="relative bg-black text-white p-3 rounded-lg font-mono text-sm border border-gray-700">
+                        <button id="copyFilenameBtn" class="absolute top-1 right-1 bg-gray-700 hover:bg-gray-600 text-white py-1 px-2 rounded-md text-xs">Copy</button>
+                        <code id="filename-output"></code>
+                    </div>
+                </div>
+
+                <div id="output" class="relative bg-black text-white p-4 rounded-lg font-mono text-sm overflow-x-auto min-h-[300px] hidden border border-gray-700">
+                    <button id="copyBtn" class="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white py-1 px-3 rounded-md text-xs">Copy</button>
+                    <pre class="whitespace-pre-wrap"><code id="json-output"></code></pre>
+                </div>
+            </div>
+
+            <div id="error" class="hidden lg:col-span-3 bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg" role="alert">
+                <strong class="font-bold">Error:</strong>
+                <span class="block sm:inline" id="error-message"></span>
             </div>
         </main>
 
         <footer class="text-center mt-8 text-[#ccc1aa] text-sm">
             <p>&copy; 2025 SIGNIFO Canvas Indonesia. All Rights Reserved.</p>
-            <p class="text-xs text-gray-500 mt-1">Version 2.0 | Last Updated: October 4, 2025</p>
+            <p class="text-xs text-gray-500 mt-1">Version 3.0 | Last Updated: October 7, 2025</p>
         </footer>
     </div>
     
@@ -185,7 +217,7 @@
         <input type="hidden">
         <button type="button" class="custom-select-button" aria-haspopup="listbox" aria-expanded="false">
             <span class="flex items-center"></span>
-            <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 L 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
         </button>
         <div class="custom-select-options hidden opacity-0 transform -translate-y-2" role="listbox"></div>
     </template>
