@@ -2,7 +2,7 @@
 export const colorOptions = [
   "Eerie Black (#0D0D0D)",
   "Bright Imperial Blue (#001379)",
-  "Crimson Red (#9F0D17)",
+  "Bold Chili Red (#9F0D17)",
   "Dark Roast (#2B1B17)",
   "Tropical Teal (#2B939A)",
   "Azure Blue (#066CBA)",
