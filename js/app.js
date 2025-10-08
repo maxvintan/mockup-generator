@@ -501,24 +501,72 @@ function handleModeChange(newMode) { state.generationMode = newMode; const isAes
 function updateAccentColorOptions() { const primaryColorValue = state.primaryColor; let availableAccentColors = ["Automatic", "No Accent Color", ...colorOptions]; if (primaryColorValue !== "Automatic") { availableAccentColors = availableAccentColors.filter(color => color !== primaryColorValue); } customSelects.accentColor.populateOptions(availableAccentColors); if (state.accentColor === primaryColorValue) { state.accentColor = "Automatic"; customSelects.accentColor.updateButton("Automatic"); } }
 function updateUIWithResult(jsonText) {
     if (!jsonText) throw new Error("Failed to generate valid content from the model.");
+
+    // Clean up markdown code blocks
     const cleanedJsonText = jsonText.replace(/```json/g, '').replace(/```/g, '').trim();
+
     let parsedJson;
     try {
+        // First attempt: direct parsing
         parsedJson = JSON.parse(cleanedJsonText);
     } catch(e) {
-        console.error("Failed to parse JSON:", cleanedJsonText);
-        throw new Error("The model returned invalid JSON. Please try again.");
+        console.warn("Direct JSON parsing failed, attempting to repair JSON:", e.message);
+
+        try {
+            // Second attempt: repair common JSON issues
+            parsedJson = parseRepairedJson(cleanedJsonText);
+        } catch(repairError) {
+            console.error("Failed to parse JSON after repair attempt:", cleanedJsonText);
+            console.error("Repair error:", repairError.message);
+            throw new Error("The model returned invalid JSON that could not be parsed. Please try again with a different model or prompt.");
+        }
     }
 
     DOMElements.jsonOutput.textContent = JSON.stringify(parsedJson, null, 2);
     DOMElements.outputContainer.classList.remove('hidden');
 
-    const nameToFormat = parsedJson.metadata.theme_name_romanized || parsedJson.metadata.theme_name;
+    const nameToFormat = parsedJson.metadata?.theme_name_romanized || parsedJson.metadata?.theme_name;
     if (nameToFormat) {
         const formattedName = formatThemeNameForFile(nameToFormat);
         DOMElements.filenameOutput.textContent = formattedName;
         DOMElements.filenameContainer.classList.remove('hidden');
     }
+}
+
+// Robust JSON parser that handles common AI model formatting issues
+function parseRepairedJson(jsonText) {
+    let repaired = jsonText;
+
+    // Fix 1: Standardize quotes for object keys (single quotes → double quotes)
+    // This handles cases like {'key': 'value'} → {"key": "value"}
+    repaired = repaired.replace(/'([^']+)'(\s*:)/g, '"$1"$2');
+
+    // Fix 2: Handle mixed quote scenarios in nested objects
+    // Look for patterns like "key": 'value' and convert to "key": "value"
+    repaired = repaired.replace(/"([^"]+)"\s*:\s*'([^']+)'/g, '"$1": "$2"');
+
+    // Fix 3: Handle cases where values have single quotes but should be double quotes
+    // This is more complex, so we'll use a more targeted approach
+    repaired = repaired.replace(/'([^']*)'/g, (match, content) => {
+        // Only replace single quotes that are likely string values
+        // Avoid replacing single quotes in the middle of words or contractions
+        if (content.includes(':') || content.includes(',') || content.includes('{') || content.includes('}')) {
+            return match; // Keep single quotes for complex content
+        }
+        return `"${content}"`;
+    });
+
+    // Fix 4: Handle trailing commas before closing braces/brackets
+    repaired = repaired.replace(/,(\s*[}\]])/g, '$1');
+
+    // Fix 5: Handle missing commas between object properties
+    // This is tricky, so we'll use a more conservative approach
+    repaired = repaired.replace(/}(\s*){/g, '},$1{');
+    repaired = repaired.replace(/](\s*)\[/g, '],$1[');
+
+    console.log("Repaired JSON:", repaired);
+
+    return JSON.parse(repaired);
 }
 function showError(message) { DOMElements.errorMessage.textContent = message; DOMElements.errorContainer.classList.remove('hidden'); }
 function hideError() { DOMElements.errorContainer.classList.add('hidden'); }

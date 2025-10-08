@@ -2,7 +2,7 @@
 
 A sophisticated web-based mockup prompt generator for fashion and accessory design. Create AI-powered design prompts with customizable colors, aesthetics, countries, designers, and creative modes. Features advanced AI model selection through OpenRouter API with intelligent filtering and cost estimation.
 
-![Version](https://img.shields.io/badge/version-3.1-blue.svg)
+![Version](https://img.shields.io/badge/version-3.2-blue.svg)
 ![Last Updated](https://img.shields.io/badge/last_updated-October_8,_2025-green.svg)
 
 ![Preview of the GitHub repository layout with screenshot](https://assets.zyrosite.com/mePvQZQyOMTq15Xq/mockup-generator-github-AzGM409PkBUJX9XX.jpg)
@@ -133,6 +133,8 @@ mockup-generator/
 ### API Service
 - Robust error handling and user feedback
 - Support for multiple AI model providers
+- **Robust JSON parsing** with automatic repair of malformed AI responses
+- Advanced error recovery for mixed quote types and formatting issues
 - JSON validation and cleaning
 
 ### Advanced Model Selection
@@ -183,6 +185,7 @@ This project is part of the SIGNIFO Canvas ecosystem. For contributions or modif
 
 ## Version History
 
+- **v3.2** (October 8, 2025): Added robust JSON parsing to handle malformed AI model responses, improved error handling for mixed quote types and formatting inconsistencies from AI-generated content
 - **v3.1** (October 8, 2025): Tailwind CSS v4 upgrade with enhanced build process, account limits tracking, advanced loading animations, generation timer, file name suggestions, enhanced model search and filtering capabilities
 - **v3.0** (October 7, 2025): Complete OpenRouter integration with advanced model selection, cost estimation, vision model support, enhanced filtering capabilities, and expanded product catalog (55+ variations across 22 countries)
 - **v2.0** (October 4, 2025): Major update with enhanced UI, new creative modes, and improved AI integration
