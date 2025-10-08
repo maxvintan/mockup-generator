@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* Import custom SIGNIFO styles */
+@import './styles.css';

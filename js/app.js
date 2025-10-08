@@ -17,6 +17,7 @@ function estimateGenerationCost(model, inputTokens = 20000, outputTokens = 5000)
 let generationStartTime = null;
 let generationTimer = null;
 let finalElapsedTime = null;
+let timerProgressInterval = null;
 
 // --- ADD CAPABILITIES TO MODEL DATA ---
 function enhanceModelData(models) {
@@ -105,6 +106,7 @@ const getDefaultState = () => ({
     designer: "Automatic",
     aesthetic: aesthetics[0],
     creativeMode: 'none',
+    keyLimits: null,
 });
 
 let state = getDefaultState();
@@ -135,6 +137,25 @@ const DOMElements = {
     creativeModeRadios: document.querySelectorAll('input[name="creativeMode"]'),
     creativeModeDescription: document.getElementById('creativeModeDescription'),
     aestheticSelectWrapper: document.getElementById('aesthetic_select_container_wrapper'),
+    // Limit display elements
+    limitDisplay: document.getElementById('limit_display'),
+    limitRemainingValue: document.getElementById('limit_remaining_value'),
+    limitTotal: document.getElementById('limit_total'),
+    limitUsage: document.getElementById('limit_usage'),
+    limitMessage: document.getElementById('limit_message'),
+    // Additional limit display elements
+    keyLabel: document.getElementById('key_label'),
+    isFreeTier: document.getElementById('is_free_tier'),
+    usageDaily: document.getElementById('usage_daily'),
+    usageWeekly: document.getElementById('usage_weekly'),
+    usageMonthly: document.getElementById('usage_monthly'),
+    byokUsage: document.getElementById('byok_usage'),
+    byokUsageDaily: document.getElementById('byok_usage_daily'),
+    byokUsageWeekly: document.getElementById('byok_usage_weekly'),
+    byokUsageMonthly: document.getElementById('byok_usage_monthly'),
+    isProvisioningKey: document.getElementById('is_provisioning_key'),
+    includeByokInLimit: document.getElementById('include_byok_in_limit'),
+    limitReset: document.getElementById('limit_reset'),
 };
 
 // --- CORE LOGIC & EVENT HANDLERS ---
@@ -146,26 +167,9 @@ function setLoadingState(isLoading) {
 
     if (isLoading) {
         generationStartTime = Date.now();
-        generationTimer = setInterval(() => {
-            const elapsed = ((Date.now() - generationStartTime) / 1000).toFixed(1);
-            finalElapsedTime = parseFloat(elapsed);
-            const loaderDiv = DOMElements.loader;
-            let timeSpan = loaderDiv.querySelector('.elapsed-time');
-            if (!timeSpan) {
-                timeSpan = document.createElement('span');
-                timeSpan.className = 'elapsed-time text-lg font-medium text-white mt-4';
-                loaderDiv.appendChild(timeSpan);
-            }
-            timeSpan.textContent = `${elapsed}s`;
-        }, 100);
+        startExtraordinaryTimer();
     } else {
-        if (generationTimer) {
-            clearInterval(generationTimer);
-            generationTimer = null;
-        }
-        const timeSpan = DOMElements.loader.querySelector('.elapsed-time');
-        if (timeSpan) timeSpan.remove();
-        generationStartTime = null;
+        stopExtraordinaryTimer();
 
         // Store final elapsed time for display
         if (finalElapsedTime !== null) {
@@ -174,6 +178,54 @@ function setLoadingState(isLoading) {
         }
         finalElapsedTime = null;
     }
+}
+
+function startExtraordinaryTimer() {
+    const timerValue = document.getElementById('animated-timer');
+    const progressBar = document.getElementById('timer-progress');
+
+    if (!timerValue || !progressBar) return;
+
+    generationTimer = setInterval(() => {
+        const elapsed = ((Date.now() - generationStartTime) / 1000).toFixed(1);
+        finalElapsedTime = parseFloat(elapsed);
+
+        // Update animated timer value
+        timerValue.textContent = elapsed;
+
+        // Update progress ring (full circle = 339.292 units)
+        const maxTime = 60; // 60 seconds for full circle
+        const progress = Math.min((elapsed / maxTime) * 100, 100);
+        const offset = 339.292 * (1 - progress / 100);
+
+        progressBar.style.strokeDashoffset = offset;
+        progressBar.classList.add('animate');
+
+        // Remove animation class after animation completes
+        setTimeout(() => {
+            progressBar.classList.remove('animate');
+        }, 100);
+
+    }, 100);
+}
+
+function stopExtraordinaryTimer() {
+    if (generationTimer) {
+        clearInterval(generationTimer);
+        generationTimer = null;
+    }
+    if (timerProgressInterval) {
+        clearInterval(timerProgressInterval);
+        timerProgressInterval = null;
+    }
+
+    // Reset progress ring
+    const progressBar = document.getElementById('timer-progress');
+    if (progressBar) {
+        progressBar.style.strokeDashoffset = '339.292';
+    }
+
+    generationStartTime = null;
 }
 
 function updateDisplayedModels() {
@@ -261,27 +313,44 @@ async function handleVerifyKey() {
     DOMElements.modelControlsWrapper.classList.add('hidden');
     DOMElements.modelSelectWrapper.classList.add('hidden');
 
+    // Show loading state for limits
+    showLimitLoading();
+
     try {
-        const models = await apiService.verifyAndFetchModels(apiKey);
+        // Fetch both models and limits in parallel
+        const [models, limits] = await Promise.all([
+            apiService.verifyAndFetchModels(apiKey),
+            apiService.fetchKeyLimits(apiKey).catch(error => {
+                // If limits fetch fails, continue without limits data
+                console.warn("Could not fetch key limits:", error);
+                return null;
+            })
+        ]);
+
         allModels = enhanceModelData(models);
+        state.keyLimits = limits;
 
         DOMElements.apiKeyMessage.textContent = '✅ Key verified successfully. Models loaded.';
 
         populateProviderFilter();
         updateDisplayedModels();
+        updateLimitDisplay(limits);
 
         DOMElements.modelControlsWrapper.classList.remove('hidden');
         DOMElements.modelSelectWrapper.classList.remove('hidden');
     } catch (error) {
         allModels = [];
-        console.error("API Key Verification Error:", error);
+        state.keyLimits = null;
         state.selectedModelId = null;
+
+        console.error("API Key Verification Error:", error);
         let userMessage = "Could not connect to OpenRouter. Please check your network.";
         if (error.status === 401) {
             userMessage = "Authentication failed. The API key you provided is invalid.";
         }
         DOMElements.apiKeyMessage.textContent = 'Verification failed. Please check your key.';
         showError(userMessage);
+        showLimitError();
     } finally {
         DOMElements.verifyKeyBtn.disabled = false;
         DOMElements.verifyKeyBtn.textContent = 'Verify';
@@ -317,17 +386,17 @@ function resetForm() {
     const currentApiKey = state.apiKey;
     state = getDefaultState();
     state.apiKey = currentApiKey;
-    
+
     DOMElements.modeCustomRadio.checked = true;
     DOMElements.creativeModeRadios[0].checked = true;
     handleCreativeModeChange('none');
-    
+
     for (const key in customSelects) {
         if (key !== 'model' && customSelects[key].defaultConfig) {
             customSelects[key].updateButton(customSelects[key].defaultConfig);
         }
     }
-    
+
     customSelects.productCategory.onSelect(state.productCategory);
     updateAccentColorOptions();
     handleModeChange('custom');
@@ -338,10 +407,14 @@ function resetForm() {
     DOMElements.sortModelSelect.value = 'recommended';
     DOMElements.filterProviderSelect.innerHTML = '<option value="all">All Providers</option>';
     state.selectedModelId = null;
+    state.keyLimits = null;
     if (customSelects.model) {
         document.getElementById('model_select_container').innerHTML = '';
         delete customSelects.model;
     }
+
+    // Reset limit display
+    resetLimitDisplay();
 
     hideError();
     DOMElements.outputContainer.classList.add('hidden');
@@ -450,5 +523,67 @@ function updateUIWithResult(jsonText) {
 function showError(message) { DOMElements.errorMessage.textContent = message; DOMElements.errorContainer.classList.remove('hidden'); }
 function hideError() { DOMElements.errorContainer.classList.add('hidden'); }
 function handleCreativeModeChange(mode) { state.creativeMode = mode; const descriptions = { 'none': 'Standard creative generation', 'fiction': 'Fantasy, sci-fi, and fictional world-inspired designs', 'historical': 'Historical periods and ancient civilizations-inspired designs' }; DOMElements.creativeModeDescription.textContent = descriptions[mode]; }
+
+// --- LIMIT DISPLAY FUNCTIONS ---
+function showLimitLoading() {
+    DOMElements.limitRemainingValue.textContent = '...';
+    DOMElements.limitTotal.textContent = '...';
+    DOMElements.limitUsage.textContent = '...';
+    DOMElements.limitMessage.textContent = 'Loading limits...';
+}
+
+function updateLimitDisplay(limits) {
+    if (!limits) {
+        resetLimitDisplay();
+        return;
+    }
+
+    // Main limit display (prominent)
+    const limitRemaining = limits.limit_remaining || 0;
+    DOMElements.limitRemainingValue.textContent = `$${limitRemaining.toFixed(2)}`;
+
+    // Key Information Section
+    DOMElements.keyLabel.textContent = limits.label || 'N/A';
+    DOMElements.limitTotal.textContent = `$${limits.limit?.toFixed(2) || '0.00'}`;
+    DOMElements.limitUsage.textContent = `$${limits.usage?.toFixed(2) || '0.00'}`;
+    DOMElements.isFreeTier.textContent = limits.is_free_tier ? 'Yes' : 'No';
+
+    // Usage Breakdown
+    DOMElements.usageDaily.textContent = `$${limits.usage_daily?.toFixed(2) || '0.00'}`;
+    DOMElements.usageWeekly.textContent = `$${limits.usage_weekly?.toFixed(2) || '0.00'}`;
+    DOMElements.usageMonthly.textContent = `$${limits.usage_monthly?.toFixed(2) || '0.00'}`;
+
+    // BYOK Usage
+    DOMElements.byokUsage.textContent = `$${limits.byok_usage?.toFixed(2) || '0.00'}`;
+    DOMElements.byokUsageDaily.textContent = `$${limits.byok_usage_daily?.toFixed(2) || '0.00'}`;
+    DOMElements.byokUsageWeekly.textContent = `$${limits.byok_usage_weekly?.toFixed(2) || '0.00'}`;
+    DOMElements.byokUsageMonthly.textContent = `$${limits.byok_usage_monthly?.toFixed(2) || '0.00'}`;
+
+    // Account Status
+    DOMElements.isProvisioningKey.textContent = limits.is_provisioning_key ? 'Yes' : 'No';
+    DOMElements.includeByokInLimit.textContent = limits.include_byok_in_limit ? 'Yes' : 'No';
+    DOMElements.limitReset.textContent = limits.limit_reset || 'None';
+
+    // Update status message
+    if (limits.is_free_tier) {
+        DOMElements.limitMessage.textContent = 'Free tier account - All data loaded';
+    } else {
+        DOMElements.limitMessage.textContent = 'Verified account - All data loaded';
+    }
+}
+
+function showLimitError() {
+    DOMElements.limitRemainingValue.textContent = 'Error';
+    DOMElements.limitTotal.textContent = 'Error';
+    DOMElements.limitUsage.textContent = 'Error';
+    DOMElements.limitMessage.textContent = 'Could not fetch limit information';
+}
+
+function resetLimitDisplay() {
+    DOMElements.limitRemainingValue.textContent = '-';
+    DOMElements.limitTotal.textContent = '-';
+    DOMElements.limitUsage.textContent = '-';
+    DOMElements.limitMessage.textContent = 'Verify your API key to see limits';
+}
 
 document.addEventListener('DOMContentLoaded', initializeApp);

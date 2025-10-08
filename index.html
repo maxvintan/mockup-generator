@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIGNIFO | Mockup Prompt Generator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/output.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Calistoga&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="container mx-1 md:mx-2 max-w-none">
@@ -22,7 +21,7 @@
         <main class="lg:grid lg:grid-cols-5 gap-4 bg-[#1c2833] p-4 md:p-6 rounded-2xl shadow-lg">
 
             <!-- LEFT CARD: Input Configuration -->
-            <div class="bg-black/20 p-4 rounded-lg space-y-6 lg:col-span-1">
+            <div class="bg-black/20 p-3 rounded-lg space-y-4 lg:col-span-1 lg:row-span-2">
                 <h2 class="text-xl font-semibold text-white mb-6">Configuration</h2>
 
                 <div>
@@ -111,27 +110,129 @@
                         Generate Prompt
                     </button>
                 </div>
+
+                <!-- Account Limits Section (moved below generate button) -->
+                <div id="account_limits_section" class="mt-6 space-y-4">
+                    <h3 class="text-lg font-semibold text-white mb-4">Account Limits</h3>
+
+                    <div id="limit_display" class="space-y-3">
+                        <!-- Main Limit Display -->
+                        <div class="text-center p-3 bg-black/20 rounded-lg">
+                            <div class="text-sm text-[#ccc1aa] mb-1">Limit Remaining</div>
+                            <div class="text-2xl font-bold text-[#dac25a]" id="limit_remaining_value">-</div>
+                            <div class="text-xs text-gray-400" id="limit_currency">USD</div>
+                        </div>
+
+                        <!-- Key Information -->
+                        <div class="grid grid-cols-1 gap-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-[#ccc1aa]">Label:</span>
+                                <span class="text-white text-right" id="key_label">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-[#ccc1aa]">Total Limit:</span>
+                                <span class="text-white" id="limit_total">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-[#ccc1aa]">Usage:</span>
+                                <span class="text-white" id="limit_usage">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-[#ccc1aa]">Free Tier:</span>
+                                <span class="text-white" id="is_free_tier">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Usage Breakdown -->
+                        <div class="border-t border-gray-600 pt-3">
+                            <div class="text-xs text-[#ccc1aa] mb-2 font-medium">Usage Breakdown</div>
+                            <div class="grid grid-cols-1 gap-1 text-xs">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Daily:</span>
+                                    <span class="text-white" id="usage_daily">-</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Weekly:</span>
+                                    <span class="text-white" id="usage_weekly">-</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Monthly:</span>
+                                    <span class="text-white" id="usage_monthly">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BYOK Usage -->
+                        <div class="border-t border-gray-600 pt-3">
+                            <div class="text-xs text-[#ccc1aa] mb-2 font-medium">BYOK Usage</div>
+                            <div class="grid grid-cols-1 gap-1 text-xs">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">BYOK Total:</span>
+                                    <span class="text-white" id="byok_usage">-</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">BYOK Daily:</span>
+                                    <span class="text-white" id="byok_usage_daily">-</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">BYOK Weekly:</span>
+                                    <span class="text-white" id="byok_usage_weekly">-</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">BYOK Monthly:</span>
+                                    <span class="text-white" id="byok_usage_monthly">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Status -->
+                        <div class="border-t border-gray-600 pt-3">
+                            <div class="text-xs text-[#ccc1aa] mb-2 font-medium">Account Status</div>
+                            <div class="grid grid-cols-1 gap-1 text-xs">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Provisioning Key:</span>
+                                    <span class="text-white" id="is_provisioning_key">-</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">BYOK in Limit:</span>
+                                    <span class="text-white" id="include_byok_in_limit">-</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Limit Reset:</span>
+                                    <span class="text-white" id="limit_reset">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-xs text-gray-500 text-center pt-2 border-t border-gray-600" id="limit_message">
+                            Verify your API key to see all data
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- CENTER CARD: AI Model Selection -->
-            <div class="bg-black/20 p-4 rounded-lg space-y-6 lg:col-span-3">
-                <h2 class="text-xl font-semibold text-white mb-6">AI Model Selection</h2>
+            <!-- TOP ROW: Combined API Key + Model Selection, Account Limits, Generated Results -->
+            <!-- Combined API Key + Model Selection Card (50% width) -->
+            <div class="bg-black/20 p-3 rounded-lg space-y-4 lg:col-span-3">
+                <h2 class="text-lg font-semibold text-white mb-4">API Key & Model Selection</h2>
 
+                <!-- API Key Section -->
                 <div>
-                    <label for="api_key" class="block text-lg font-medium text-[#ccc1aa] mb-3">OpenRouter API Key</label>
-                    <div class="flex items-center gap-4">
-                        <input type="password" id="api_key" class="block w-full rounded-lg bg-gray-800 border-gray-700 text-white shadow-sm focus:border-[#dac25a] focus:ring focus:ring-[#dac25a] focus:ring-opacity-50" placeholder="Enter your OpenRouter key">
-                        <button id="verifyKeyBtn" class="bg-gray-700 text-white font-bold py-2 px-5 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-gray-500 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <label for="api_key" class="block text-sm font-medium text-[#ccc1aa] mb-2">OpenRouter API Key</label>
+                    <div class="flex items-center gap-3">
+                        <input type="password" id="api_key" class="block w-full rounded-lg bg-gray-800 border-gray-700 text-white shadow-sm focus:border-[#dac25a] focus:ring focus:ring-[#dac25a] focus:ring-opacity-50 text-sm" placeholder="Enter your OpenRouter key">
+                        <button id="verifyKeyBtn" class="bg-gray-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-gray-500 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-sm">
                             Verify
                         </button>
                     </div>
-                    <p id="apiKeyMessage" class="mt-2 text-xs text-gray-500 h-4">Your key is needed to fetch available models.</p>
+                    <p id="apiKeyMessage" class="mt-2 text-xs text-gray-500 h-3">Your key is needed to fetch available models.</p>
                 </div>
 
-                <div id="model_controls_wrapper" class="hidden grid grid-cols-1 gap-6">
+                <!-- Model Selection Section -->
+                <div id="model_controls_wrapper" class="hidden space-y-4">
                     <div>
                         <label for="sort_model_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Sort by</label>
-                        <select id="sort_model_select" class="block w-full rounded-lg bg-gray-800 border-gray-700 text-white shadow-sm focus:border-[#dac25a] focus:ring focus:ring-[#dac25a] focus:ring-opacity-50">
+                        <select id="sort_model_select" class="block w-full rounded-lg bg-gray-800 border-gray-700 text-white shadow-sm focus:border-[#dac25a] focus:ring focus:ring-[#dac25a] focus:ring-opacity-50 text-sm">
                     <option value="recommended">Recommended</option>
                     <option value="mockup_optimized">Mockup Optimized</option>
                     <option value="price_asc">Price: Low to High</option>
@@ -142,13 +243,13 @@
                     </div>
                 </div>
 
-                <div id="model_select_wrapper" class="hidden mt-4">
-                    <div id="model_controls" class="mb-4 space-y-4">
+                <div id="model_select_wrapper" class="hidden">
+                    <div id="model_controls" class="mb-4 space-y-3">
                         <div>
                             <label class="block text-sm font-medium text-[#ccc1aa] mb-2">Search Models</label>
-                            <input id="search_models" type="text" placeholder="Filter by name or ID..." class="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white rounded-md focus:border-[#dac25a] focus:ring-[#dac25a]">
+                            <input id="search_models" type="text" placeholder="Filter by name or ID..." class="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white rounded-md focus:border-[#dac25a] focus:ring-[#dac25a] text-sm">
                         </div>
-                        <div class="flex flex-wrap gap-4">
+                        <div class="flex flex-wrap gap-3">
                             <label class="flex items-center text-sm text-[#ccc1aa]">
                                 <input type="checkbox" id="filter_free" class="mr-2"> Free Only
                             </label>
@@ -160,23 +261,47 @@
                             </label>
                             <div>
                                 <label for="filter_provider_select" class="block text-sm font-medium text-[#ccc1aa] mb-1">Provider</label>
-                                <select id="filter_provider_select" class="px-3 py-2 bg-gray-800 border border-gray-700 text-white rounded-md focus:border-[#dac25a] focus:ring-[#dac25a]">
+                                <select id="filter_provider_select" class="px-3 py-2 bg-gray-800 border border-gray-700 text-white rounded-md focus:border-[#dac25a] focus:ring-[#dac25a] text-sm">
                                     <option value="all">All Providers</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div id="model_cards_container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+                    <div id="model_cards_container" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
                 </div>
             </div>
 
-            <!-- RIGHT CARD: Result Output -->
-            <div class="bg-black/20 p-4 rounded-lg space-y-6 lg:col-span-1">
+
+
+
+
+            <!-- RIGHT CARD: Generated Result (Full Height) -->
+            <div class="bg-black/20 p-3 rounded-lg space-y-4 lg:col-span-1 lg:row-span-2">
                 <h2 class="text-xl font-semibold text-white mb-6">Generated Result</h2>
 
                 <div id="loader" class="hidden flex flex-col items-center justify-center py-6">
-                    <div class="loader"></div>
-                    <div class="elapsed-time text-lg font-medium text-white mt-4">0.0s</div>
+                    <!-- Extraordinary Loading Animation -->
+                    <div class="extraordinary-loader">
+                        <div class="loader-ring ring-1"></div>
+                        <div class="loader-ring ring-2"></div>
+                        <div class="loader-ring ring-3"></div>
+                        <div class="loader-core">
+                            <div class="core-pulse"></div>
+                        </div>
+                    </div>
+                    <!-- Extraordinary Elapsed Time Display -->
+                    <div class="extraordinary-timer mt-6">
+                        <div class="timer-display">
+                            <div class="timer-value" id="animated-timer">0.0</div>
+                            <div class="timer-label">seconds</div>
+                        </div>
+                        <div class="timer-progress">
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle class="progress-bg" cx="60" cy="60" r="54"/>
+                                <circle class="progress-bar" cx="60" cy="60" r="54" id="timer-progress"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="generation_time" class="hidden bg-[#1c2833] border border-gray-600 rounded-lg p-3 mb-4">
@@ -201,7 +326,7 @@
                 </div>
             </div>
 
-            <div id="error" class="hidden lg:col-span-3 bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg" role="alert">
+            <div id="error" class="hidden lg:col-span-4 bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg" role="alert">
                 <strong class="font-bold">Error:</strong>
                 <span class="block sm:inline" id="error-message"></span>
             </div>
@@ -209,7 +334,7 @@
 
         <footer class="text-center mt-8 text-[#ccc1aa] text-sm">
             <p>&copy; 2025 SIGNIFO Canvas Indonesia. All Rights Reserved.</p>
-            <p class="text-xs text-gray-500 mt-1">Version 3.0 | Last Updated: October 7, 2025</p>
+            <p class="text-xs text-gray-500 mt-1">Version 3.1 | Last Updated: October 8, 2025</p>
         </footer>
     </div>
     

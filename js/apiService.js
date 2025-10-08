@@ -1,9 +1,32 @@
 // --- API ABSTRACTION ---
 export const apiService = {
     /**
-     * Verifies an OpenRouter API key and fetches the user's available models.
+     * Fetches the key limit information from OpenRouter API.
      * @param {string} apiKey - The user's OpenRouter API key.
-     * @returns {Promise<Array>} A promise that resolves to an array of model objects.
+     * @returns {Promise<Object>} A promise that resolves to key limit data.
+     */
+    async fetchKeyLimits(apiKey) {
+        const response = await fetch('https://openrouter.ai/api/v1/key', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`
+            }
+        });
+
+        if (!response.ok) {
+            const err = new Error(`Failed to fetch key limits with status: ${response.status}.`);
+            err.status = response.status;
+            throw err;
+        }
+
+        const result = await response.json();
+        return result.data;
+    },
+
+    /**
+     * Verifies an OpenRouter API key and fetches the user's available models and key limits.
+     * @param {string} apiKey - The user's OpenRouter API key.
+     * @returns {Promise<Object>} A promise that resolves to an object containing models and limits.
      */
     async verifyAndFetchModels(apiKey) {
         // Get user's accessible models

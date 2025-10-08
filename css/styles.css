@@ -1,3 +1,4 @@
+/* ===== SIGNIFO CUSTOM STYLES ===== */
 :root {
     --brand-gold: #dac25a;
     --text-primary: #ccc1aa;
@@ -31,6 +32,228 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* ===== EXTRAORDINARY LOADING ANIMATION ===== */
+.extraordinary-loader {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-ring {
+    position: absolute;
+    border: 3px solid transparent;
+    border-radius: 50%;
+    animation: ring-rotate linear infinite;
+}
+
+.ring-1 {
+    width: 120px;
+    height: 120px;
+    border-top: 3px solid #dac25a;
+    border-right: 3px solid rgba(218, 194, 90, 0.3);
+    animation-duration: 2s;
+}
+
+.ring-2 {
+    width: 80px;
+    height: 80px;
+    border-top: 3px solid #dac25a;
+    border-left: 3px solid rgba(218, 194, 90, 0.5);
+    animation-duration: 1.5s;
+    animation-direction: reverse;
+}
+
+.ring-3 {
+    width: 40px;
+    height: 40px;
+    border-top: 3px solid #dac25a;
+    border-bottom: 3px solid rgba(218, 194, 90, 0.7);
+    animation-duration: 1s;
+}
+
+@keyframes ring-rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loader-core {
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #dac25a 0%, rgba(218, 194, 90, 0.3) 70%);
+    border-radius: 50%;
+    position: relative;
+    animation: core-pulse 1s ease-in-out infinite alternate;
+}
+
+.core-pulse {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #dac25a, #f6e05e);
+    border-radius: 50%;
+    animation: pulse-glow 0.8s ease-in-out infinite;
+}
+
+@keyframes core-pulse {
+    0% { transform: scale(0.8); }
+    100% { transform: scale(1.2); }
+}
+
+@keyframes pulse-glow {
+    0% {
+        box-shadow: 0 0 5px #dac25a, 0 0 10px #dac25a, 0 0 15px #dac25a;
+        opacity: 0.7;
+    }
+    100% {
+        box-shadow: 0 0 10px #dac25a, 0 0 20px #dac25a, 0 0 30px #dac25a;
+        opacity: 1;
+    }
+}
+
+/* ===== EXTRAORDINARY TIMER ANIMATION ===== */
+.extraordinary-timer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer-display {
+    text-align: center;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.timer-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #dac25a;
+    font-family: 'Inter', monospace;
+    text-shadow: 0 0 10px rgba(218, 194, 90, 0.5);
+    animation: number-glow 0.5s ease-in-out infinite alternate;
+    line-height: 1;
+}
+
+.timer-label {
+    font-size: 0.875rem;
+    color: #ccc1aa;
+    margin-top: 0.25rem;
+    letter-spacing: 0.05em;
+}
+
+@keyframes number-glow {
+    0% {
+        text-shadow: 0 0 10px rgba(218, 194, 90, 0.5);
+        transform: scale(1);
+    }
+    100% {
+        text-shadow: 0 0 20px rgba(218, 194, 90, 0.8), 0 0 30px rgba(218, 194, 90, 0.4);
+        transform: scale(1.05);
+    }
+}
+
+.timer-progress {
+    position: relative;
+    transform: rotate(-90deg);
+}
+
+.progress-ring {
+    filter: drop-shadow(0 0 5px rgba(218, 194, 90, 0.3));
+}
+
+.progress-bg {
+    fill: none;
+    stroke: rgba(218, 194, 90, 0.1);
+    stroke-width: 6;
+}
+
+.progress-bar {
+    fill: none;
+    stroke: #dac25a;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 339.292;
+    stroke-dashoffset: 339.292;
+    transition: stroke-dashoffset 0.1s ease-in-out;
+    filter: drop-shadow(0 0 3px #dac25a);
+}
+
+.progress-bar.animate {
+    animation: progress-fill 0.1s ease-in-out;
+}
+
+@keyframes progress-fill {
+    0% {
+        stroke-dashoffset: 339.292;
+    }
+    100% {
+        stroke-dashoffset: var(--target-offset);
+    }
+}
+
+/* ===== ENHANCED VISUAL EFFECTS ===== */
+.extraordinary-loader::before {
+    content: '';
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(218, 194, 90, 0.1) 0%, transparent 70%);
+    animation: aura-pulse 3s ease-in-out infinite;
+}
+
+@keyframes aura-pulse {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(0.9);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
+}
+
+/* ===== RESPONSIVE ENHANCEMENTS ===== */
+@media (max-width: 768px) {
+    .extraordinary-loader {
+        width: 80px;
+        height: 80px;
+    }
+
+    .ring-1 {
+        width: 80px;
+        height: 80px;
+    }
+
+    .ring-2 {
+        width: 60px;
+        height: 60px;
+    }
+
+    .ring-3 {
+        width: 30px;
+        height: 30px;
+    }
+
+    .timer-value {
+        font-size: 2rem;
+    }
+
+    .progress-ring {
+        width: 100px;
+        height: 100px;
+    }
+
+    .progress-bg,
+    .progress-bar {
+        r: 45;
+        stroke-width: 5;
+    }
 }
 
 /* Custom scrollbar for webkit browsers */

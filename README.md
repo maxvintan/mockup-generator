@@ -2,8 +2,8 @@
 
 A sophisticated web-based mockup prompt generator for fashion and accessory design. Create AI-powered design prompts with customizable colors, aesthetics, countries, designers, and creative modes. Features advanced AI model selection through OpenRouter API with intelligent filtering and cost estimation.
 
-![Version](https://img.shields.io/badge/version-3.0-blue.svg)
-![Last Updated](https://img.shields.io/badge/last_updated-October_7,_2025-green.svg)
+![Version](https://img.shields.io/badge/version-3.1-blue.svg)
+![Last Updated](https://img.shields.io/badge/last_updated-October_8,_2025-green.svg)
 
 ![Preview of the GitHub repository layout with screenshot](https://assets.zyrosite.com/mePvQZQyOMTq15Xq/mockup-generator-github-AzGM409PkBUJX9XX.jpg)
 
@@ -43,12 +43,45 @@ The Mockup Generator is a powerful web application that helps designers and crea
 - Maximalist, Minimalist, Nautical, Preppy
 - Rustic / Artisanal, Steampunk, Streetwear, Whimsical
 
+### 📊 Account Management & Limits
+- **Real-time Usage Tracking**: Monitor daily, weekly, and monthly API usage
+- **Account Limits Display**: Visual indicators for remaining limits and quotas
+- **BYOK Integration**: Bring Your Own Key usage tracking and management
+- **Cost Monitoring**: Real-time display of API costs and consumption patterns
+- **Account Status**: Provisioning key status and limit reset information
+
+### ⚡ Enhanced User Experience
+- **Advanced Loading Animation**: Multi-ring animated loader with progress tracking
+- **Generation Timer**: Real-time display of AI generation duration
+- **File Name Suggestions**: Automatic filename generation based on theme names
+- **Enhanced Model Search**: Full-text search across all available AI models
+- **Model Filtering**: Filter by capabilities (vision, tools), providers, and pricing
+- **Responsive Design**: Optimized layouts for desktop and mobile devices
+
 ## Installation & Usage
+
+### Prerequisites
+- Node.js and npm for the build process
+- Modern web browser with JavaScript enabled
 
 ### Quick Start
 1. Clone this repository
-2. Open `index.html` in your web browser
-3. No additional setup required - it's a pure client-side application
+2. Install dependencies: `npm install`
+3. Build the CSS: `npx @tailwindcss/cli -i css/input.css -o css/output.css --watch`
+4. Open `index.html` in your web browser
+
+### Development Build Process
+The project uses Tailwind CSS v4 with a build process:
+```bash
+# Install dependencies
+npm install
+
+# Build CSS (development with watch mode)
+npx @tailwindcss/cli -i css/input.css -o css/output.css --watch
+
+# Build CSS (production)
+npx @tailwindcss/cli -i css/input.css -o css/output.css
+```
 
 ### API Configuration
 1. Enter your OpenRouter API key in the provided field
@@ -59,10 +92,11 @@ The Mockup Generator is a powerful web application that helps designers and crea
 ## Technology Stack
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Styling**: Tailwind CSS with custom themes
+- **Styling**: Tailwind CSS v4.1.14 with custom themes and build process
 - **Icons**: Flag Icons for country representations
 - **Fonts**: Google Fonts (Calistoga, Inter)
 - **Architecture**: Modular ES6 modules with clean separation of concerns
+- **Build Process**: Tailwind CSS v4 CLI for CSS compilation
 
 ## Project Structure
 
@@ -70,6 +104,8 @@ The Mockup Generator is a powerful web application that helps designers and crea
 mockup-generator/
 ├── index.html              # Main application entry point
 ├── css/
+│   ├── input.css           # Tailwind CSS source file with imports
+│   ├── output.css          # Compiled CSS output (generated)
 │   └── styles.css          # Custom styles and animations
 ├── js/
 │   ├── app.js              # Main application logic and state management
@@ -77,6 +113,7 @@ mockup-generator/
 │   ├── customSelect.js     # Custom dropdown component
 │   ├── apiService.js       # API communication layer
 │   └── utils.js            # Utility functions and helpers
+├── package.json            # Project dependencies and scripts
 └── README.md               # Project documentation
 ```
 
@@ -146,6 +183,7 @@ This project is part of the SIGNIFO Canvas ecosystem. For contributions or modif
 
 ## Version History
 
+- **v3.1** (October 8, 2025): Tailwind CSS v4 upgrade with enhanced build process, account limits tracking, advanced loading animations, generation timer, file name suggestions, enhanced model search and filtering capabilities
 - **v3.0** (October 7, 2025): Complete OpenRouter integration with advanced model selection, cost estimation, vision model support, enhanced filtering capabilities, and expanded product catalog (55+ variations across 22 countries)
 - **v2.0** (October 4, 2025): Major update with enhanced UI, new creative modes, and improved AI integration
 - **v1.0**: Initial release with basic prompt generation capabilities
