@@ -2,6 +2,7 @@ import { colorOptions, aesthetics, productCatalog, countries } from './constants
 import { createCustomSelect } from './customSelect.js';
 import { apiService } from './apiService.js';
 import { buildPromptContext, buildPrompts, formatThemeNameForFile, copyToClipboard } from './utils.js';
+import { parseAIJsonResponse } from './jsonParser.js';
 
 // --- COST ESTIMATION ---
 // --- COST ESTIMATION ---
@@ -500,27 +501,8 @@ function initializeApp() {
 function handleModeChange(newMode) { state.generationMode = newMode; const isAesthetic = newMode === 'theme'; DOMElements.aestheticSelectWrapper.classList.toggle('hidden', !isAesthetic); const controlsToToggle = [customSelects.primaryColor, customSelects.accentColor, customSelects.country, customSelects.designer]; if (isAesthetic) { controlsToToggle.forEach(control => { if (control && control.button) control.button.disabled = true; }); state.primaryColor = "Automatic"; state.accentColor = "Automatic"; state.country = "Automatic"; state.designer = "Automatic"; } else { controlsToToggle.forEach(control => { if (control && control.button) control.button.disabled = false; }); customSelects.primaryColor.updateButton(state.primaryColor); customSelects.accentColor.updateButton(state.accentColor); customSelects.country.updateButton(state.country); customSelects.designer.updateButton(state.designer); customSelects.country.onSelect(state.country); updateAccentColorOptions(); } }
 function updateAccentColorOptions() { const primaryColorValue = state.primaryColor; let availableAccentColors = ["Automatic", "No Accent Color", ...colorOptions]; if (primaryColorValue !== "Automatic") { availableAccentColors = availableAccentColors.filter(color => color !== primaryColorValue); } customSelects.accentColor.populateOptions(availableAccentColors); if (state.accentColor === primaryColorValue) { state.accentColor = "Automatic"; customSelects.accentColor.updateButton("Automatic"); } }
 function updateUIWithResult(jsonText) {
-    if (!jsonText) throw new Error("Failed to generate valid content from the model.");
-
-    // Clean up markdown code blocks
-    const cleanedJsonText = jsonText.replace(/```json/g, '').replace(/```/g, '').trim();
-
-    let parsedJson;
-    try {
-        // First attempt: direct parsing
-        parsedJson = JSON.parse(cleanedJsonText);
-    } catch(e) {
-        console.warn("Direct JSON parsing failed, attempting to repair JSON:", e.message);
-
-        try {
-            // Second attempt: repair common JSON issues
-            parsedJson = parseRepairedJson(cleanedJsonText);
-        } catch(repairError) {
-            console.error("Failed to parse JSON after repair attempt:", cleanedJsonText);
-            console.error("Repair error:", repairError.message);
-            throw new Error("The model returned invalid JSON that could not be parsed. Please try again with a different model or prompt.");
-        }
-    }
+    // Use the new robust JSON parser from jsonParser.js
+    const parsedJson = parseAIJsonResponse(jsonText);
 
     DOMElements.jsonOutput.textContent = JSON.stringify(parsedJson, null, 2);
     DOMElements.outputContainer.classList.remove('hidden');
@@ -564,9 +546,122 @@ function parseRepairedJson(jsonText) {
     repaired = repaired.replace(/}(\s*){/g, '},$1{');
     repaired = repaired.replace(/](\s*)\[/g, '],$1[');
 
+    // Fix 6: Remove unexpected properties that don't belong in objects
+    // This handles cases where AI adds extra properties like "prefix" in hardware object
+    repaired = removeUnexpectedProperties(repaired);
+
+    // Fix 7: Try to fix common structural issues
+    repaired = fixStructuralIssues(repaired);
+
     console.log("Repaired JSON:", repaired);
 
-    return JSON.parse(repaired);
+    try {
+        return JSON.parse(repaired);
+    } catch (parseError) {
+        console.error("Still failing to parse after repairs, trying alternative approach:", parseError.message);
+
+        // Last resort: try to extract and fix individual sections
+        return parseWithAlternativeMethod(repaired);
+    }
+}
+
+// Remove unexpected properties that AI models sometimes add incorrectly
+function removeUnexpectedProperties(jsonText) {
+    // Remove properties that commonly cause issues (like "prefix" in hardware objects)
+    jsonText = jsonText.replace(/"prefix"\s*:\s*"[^"]*",?\s*/g, '');
+
+    // Remove other common problematic properties that AI might add
+    jsonText = jsonText.replace(/"suffix"\s*:\s*"[^"]*",?\s*/g, '');
+
+    return jsonText;
+}
+
+// Fix common structural issues in JSON
+function fixStructuralIssues(jsonText) {
+    // Fix unclosed objects/brackets by ensuring proper nesting
+    const openBraces = (jsonText.match(/\{/g) || []).length;
+    const closeBraces = (jsonText.match(/\}/g) || []).length;
+    const openBrackets = (jsonText.match(/\[/g) || []).length;
+    const closeBrackets = (jsonText.match(/\]/g) || []).length;
+
+    // Add missing closing braces if needed
+    if (openBraces > closeBraces) {
+        const missingBraces = openBraces - closeBraces;
+        for (let i = 0; i < missingBraces; i++) {
+            jsonText += '}';
+        }
+    }
+
+    // Add missing closing brackets if needed
+    if (openBrackets > closeBrackets) {
+        const missingBrackets = openBrackets - closeBrackets;
+        for (let i = 0; i < missingBrackets; i++) {
+            jsonText += ']';
+        }
+    }
+
+    return jsonText;
+}
+
+// Alternative parsing method as last resort
+function parseWithAlternativeMethod(jsonText) {
+    try {
+        // Try to manually construct a valid JSON object by parsing section by section
+        const sections = jsonText.split(/("metadata"|"product"|"design"|"branding"|"photography")/);
+
+        let validJson = '{';
+        let currentSection = '';
+
+        for (let i = 0; i < sections.length; i++) {
+            const section = sections[i].trim();
+            if (section.startsWith('"metadata"') || section.startsWith('"product"') ||
+                section.startsWith('"design"') || section.startsWith('"branding"') ||
+                section.startsWith('"photography"')) {
+                currentSection = section.replace(/"/g, '');
+                validJson += `"${currentSection}":`;
+            } else if (section === ',' && currentSection) {
+                validJson += ',';
+            } else if (currentSection && section) {
+                // Try to parse this section as a complete object
+                try {
+                    const testParse = JSON.parse(section);
+                    validJson += JSON.stringify(testParse);
+                    currentSection = '';
+                } catch {
+                    // If this section fails, try to clean it up
+                    const cleanedSection = cleanupJsonSection(section);
+                    try {
+                        const testParse = JSON.parse(cleanedSection);
+                        validJson += JSON.stringify(testParse);
+                        currentSection = '';
+                    } catch {
+                        console.warn("Could not parse section:", section);
+                    }
+                }
+            }
+        }
+
+        validJson += '}';
+        console.log("Alternative parsing result:", validJson);
+
+        return JSON.parse(validJson);
+    } catch (finalError) {
+        console.error("All parsing methods failed:", finalError);
+        throw new Error("Unable to parse AI response as valid JSON. The model may need different instructions or a different model should be selected.");
+    }
+}
+
+// Clean up individual JSON sections
+function cleanupJsonSection(section) {
+    let cleaned = section;
+
+    // Remove any trailing commas
+    cleaned = cleaned.replace(/,(\s*[}\]])/g, '$1');
+
+    // Fix any remaining quote issues
+    cleaned = cleaned.replace(/'([^']+)'(\s*:)/g, '"$1"$2');
+
+    return cleaned;
 }
 function showError(message) { DOMElements.errorMessage.textContent = message; DOMElements.errorContainer.classList.remove('hidden'); }
 function hideError() { DOMElements.errorContainer.classList.add('hidden'); }

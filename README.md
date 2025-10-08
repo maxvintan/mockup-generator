@@ -109,6 +109,7 @@ mockup-generator/
 │   └── styles.css          # Custom styles and animations
 ├── js/
 │   ├── app.js              # Main application logic and state management
+│   ├── jsonParser.js       # JSON parsing utilities for AI model responses
 │   ├── constants.js        # Data constants (colors, aesthetics, products, countries)
 │   ├── customSelect.js     # Custom dropdown component
 │   ├── apiService.js       # API communication layer
