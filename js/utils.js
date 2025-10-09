@@ -174,11 +174,16 @@ CREATIVE CONSTRAINTS FOR ENHANCED ORIGINALITY:
 FICTION MODE - EXPANDED CREATIVE FREEDOM:
 - Draw inspiration from fantasy, sci-fi, mythology, and fictional worlds
 - Imagine this product existing in magical realms, futuristic societies, or epic adventures
-- Incorporate elements from fictional universes (Lord of the Rings, Star Wars, Harry Potter, etc.)
-- Think about how characters from these worlds would use this product
+- Incorporate elements from fictional universes:
+  COMICS: DC Comics (Batman, Superman, Wonder Woman, Justice League, The Flash, Green Lantern), Marvel (Spider-Man, Avengers, X-Men, Fantastic Four, Guardians of the Galaxy, Deadpool)
+  ANIMATION: Disney (Disney Princesses, Pixar films like Toy Story and Cars, classic Disney animations), Studio Ghibli (Spirited Away, My Neighbor Totoro), Warner Bros (Looney Tunes, Hanna-Barbera like Scooby-Doo and Flintstones)
+  LITERATURE: Lord of the Rings, Harry Potter, and other fantasy worlds
+  GAMING: Nintendo franchises (Mario, Zelda, Pokémon), major video game universes
+  ADDITIONAL PUBLISHERS: Dark Horse Comics (Hellboy, Sin City, Umbrella Academy), Image Comics (The Walking Dead, Spawn, Invincible, Saga), IDW Publishing (Teenage Mutant Ninja Turtles, Transformers, Star Trek), Boom! Studios (Power Rangers, Mighty Morphin' series)
+- Think about how iconic characters from these worlds would use this product
 - Create mythical or futuristic design elements while keeping the actual material as canvas
-- Design hardware that looks like it could be magical artifacts or advanced technology
-- Consider how lighting and photography could create magical or otherworldly effects
+- Design hardware that looks like it could be magical artifacts, advanced technology, or superhero gadgets
+- Consider how lighting and photography could create magical, cinematic, or otherworldly effects
 - The product should feel like it belongs in a story or fictional universe
 - Push creative boundaries beyond real-world constraints while maintaining elegance
 `;
