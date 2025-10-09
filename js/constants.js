@@ -4,7 +4,7 @@ export const colorOptions = [
   "Bright Imperial Blue (#001379)",
   "Bold Chili Red (#9F0D17)",
   "Dark Roast (#2B1B17)",
-  "Tropical Teal (#2B939A)",
+  "Tropical Teal (#2BB3B5)",
   "Azure Blue (#066CBA)",
   "Pure White (#EDEDED)",
   "Magenta (#FF00FF)",
