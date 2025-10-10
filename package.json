@@ -1,5 +1,24 @@
 {
   "devDependencies": {
     "tailwindcss": "^4.1.14"
-  }
+  },
+  "name": "mockup-generator",
+  "version": "1.0.0",
+  "description": "A sophisticated web-based mockup prompt generator for fashion and accessory design. Create AI-powered design prompts with customizable colors, aesthetics, countries, designers, and creative modes. Features advanced AI model selection through OpenRouter API with intelligent filtering and cost estimation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxvintan/mockup-generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/maxvintan/mockup-generator/issues"
+  },
+  "homepage": "https://github.com/maxvintan/mockup-generator#readme"
 }

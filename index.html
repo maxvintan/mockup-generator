@@ -279,27 +279,16 @@
             <div class="bg-black/20 p-3 rounded-lg space-y-4 lg:col-span-1 lg:row-span-2">
                 <h2 class="text-xl font-semibold text-white mb-6">Generated Result</h2>
 
-                <div id="loader" class="hidden flex flex-col items-center justify-center py-6">
-                    <!-- Extraordinary Loading Animation -->
-                    <div class="extraordinary-loader">
-                        <div class="loader-ring ring-1"></div>
-                        <div class="loader-ring ring-2"></div>
-                        <div class="loader-ring ring-3"></div>
-                        <div class="loader-core">
-                            <div class="core-pulse"></div>
-                        </div>
+                <div id="loader" class="hidden flex-col items-center justify-center py-6 min-h-full">
+                    <!-- Horizontal Loading Bar -->
+                    <div class="horizontal-loader">
+                        <div class="horizontal-bar"></div>
                     </div>
-                    <!-- Extraordinary Elapsed Time Display -->
+                    <!-- Elapsed Time Display -->
                     <div class="extraordinary-timer mt-6">
                         <div class="timer-display">
                             <div class="timer-value" id="animated-timer">0.0</div>
                             <div class="timer-label">seconds</div>
-                        </div>
-                        <div class="timer-progress">
-                            <svg class="progress-ring" width="120" height="120">
-                                <circle class="progress-bg" cx="60" cy="60" r="54"/>
-                                <circle class="progress-bar" cx="60" cy="60" r="54" id="timer-progress"/>
-                            </svg>
                         </div>
                     </div>
                 </div>

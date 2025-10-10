@@ -138,6 +138,7 @@ const DOMElements = {
     creativeModeRadios: document.querySelectorAll('input[name="creativeMode"]'),
     creativeModeDescription: document.getElementById('creativeModeDescription'),
     aestheticSelectWrapper: document.getElementById('aesthetic_select_container_wrapper'),
+    horizontalBar: document.querySelector('.horizontal-bar'),
     // Limit display elements
     limitDisplay: document.getElementById('limit_display'),
     limitRemainingValue: document.getElementById('limit_remaining_value'),
@@ -162,6 +163,10 @@ const DOMElements = {
 // --- CORE LOGIC & EVENT HANDLERS ---
 
 function setLoadingState(isLoading) {
+    console.log('setLoadingState called with:', isLoading);
+    console.log('Loader element:', DOMElements.loader);
+    console.log('Horizontal bar element:', DOMElements.horizontalBar);
+
     DOMElements.generateBtn.disabled = isLoading;
     DOMElements.loader.classList.toggle('hidden', !isLoading);
     DOMElements.generateBtn.textContent = isLoading ? 'Generating...' : 'Generate Prompt';
@@ -183,9 +188,8 @@ function setLoadingState(isLoading) {
 
 function startExtraordinaryTimer() {
     const timerValue = document.getElementById('animated-timer');
-    const progressBar = document.getElementById('timer-progress');
 
-    if (!timerValue || !progressBar) return;
+    if (!timerValue) return;
 
     generationTimer = setInterval(() => {
         const elapsed = ((Date.now() - generationStartTime) / 1000).toFixed(1);
@@ -194,18 +198,11 @@ function startExtraordinaryTimer() {
         // Update animated timer value
         timerValue.textContent = elapsed;
 
-        // Update progress ring (full circle = 339.292 units)
-        const maxTime = 60; // 60 seconds for full circle
-        const progress = Math.min((elapsed / maxTime) * 100, 100);
-        const offset = 339.292 * (1 - progress / 100);
-
-        progressBar.style.strokeDashoffset = offset;
-        progressBar.classList.add('animate');
-
-        // Remove animation class after animation completes
-        setTimeout(() => {
-            progressBar.classList.remove('animate');
-        }, 100);
+        // Update horizontal bar (fills over 60 seconds)
+        if (DOMElements.horizontalBar) {
+            const progress = Math.min((elapsed / 60) * 100, 100);
+            DOMElements.horizontalBar.style.width = `${progress}%`;
+        }
 
     }, 100);
 }
@@ -220,10 +217,9 @@ function stopExtraordinaryTimer() {
         timerProgressInterval = null;
     }
 
-    // Reset progress ring
-    const progressBar = document.getElementById('timer-progress');
-    if (progressBar) {
-        progressBar.style.strokeDashoffset = '339.292';
+    // Reset horizontal bar
+    if (DOMElements.horizontalBar) {
+        DOMElements.horizontalBar.style.width = '0%';
     }
 
     generationStartTime = null;
@@ -363,22 +359,31 @@ function populateModelSelect(models) {
 }
 
 async function handleGenerateClick() {
+    console.log('Generate button clicked');
+    console.log('API Key:', state.apiKey.trim() ? 'Present' : 'Missing');
+    console.log('Selected Model:', state.selectedModelId);
+
     if (!state.apiKey.trim()) { showError("Please enter and verify your API key."); return; }
     if (!state.selectedModelId) { showError("Please verify your key and select a model."); return; }
+
+    console.log('Starting generation process...');
     setLoadingState(true);
     hideError();
     try {
         const promptContext = buildPromptContext(state, productCatalog, colorOptions, countries);
         const { systemPrompt, userPrompt } = buildPrompts(promptContext, colorOptions);
+        console.log('Calling API service...');
         const generatedJsonText = await apiService.generate(systemPrompt, userPrompt, state.apiKey, state.selectedModelId);
+        console.log('API call completed');
         updateUIWithResult(generatedJsonText);
     } catch (error) {
         console.error("Error generating prompt:", error);
         let userMessage = error.message || "An unknown error occurred.";
-        if (error.status === 401) { userMessage = "Authentication failed. The API key you provided is likely invalid or incorrect."; } 
+        if (error.status === 401) { userMessage = "Authentication failed. The API key you provided is likely invalid or incorrect."; }
         else if (error.status === 403) { userMessage = "Permission Denied. Your API key may not have the necessary permissions."; }
         showError(userMessage);
     } finally {
+        console.log('Setting loading state to false');
         setLoadingState(false);
     }
 }
@@ -448,7 +453,10 @@ function setupEventListeners() {
         allModels = [];
     });
 
-    DOMElements.generateBtn.addEventListener('click', handleGenerateClick);
+    DOMElements.generateBtn.addEventListener('click', (e) => {
+        console.log('Generate button clicked - event listener triggered');
+        handleGenerateClick();
+    });
     DOMElements.resetBtn.addEventListener('click', resetForm);
     DOMElements.copyBtn.addEventListener('click', () => copyToClipboard(DOMElements.jsonOutput.textContent, DOMElements.copyBtn, 'Copy'));
     DOMElements.copyFilenameBtn.addEventListener('click', () => copyToClipboard(DOMElements.filenameOutput.textContent, DOMElements.copyFilenameBtn, 'Copy'));

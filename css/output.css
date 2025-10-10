@@ -303,6 +303,9 @@
   .min-h-\[300px\] {
     min-height: 300px;
   }
+  .min-h-full {
+    min-height: 100%;
+  }
   .w-4 {
     width: calc(var(--spacing) * 4);
   }
@@ -555,22 +558,6 @@
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
-  .ring {
-    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  .ring-1 {
-    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  .ring-2 {
-    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  .ring-3 {
-    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
@@ -759,82 +746,22 @@ body {
     transform: rotate(360deg);
   }
 }
-.extraordinary-loader {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.loader-ring {
-  position: absolute;
-  border: 3px solid transparent;
-  border-radius: 50%;
-  animation: ring-rotate linear infinite;
-}
-.ring-1 {
-  width: 120px;
-  height: 120px;
-  border-top: 3px solid #dac25a;
-  border-right: 3px solid rgba(218, 194, 90, 0.3);
-  animation-duration: 2s;
-}
-.ring-2 {
-  width: 80px;
-  height: 80px;
-  border-top: 3px solid #dac25a;
-  border-left: 3px solid rgba(218, 194, 90, 0.5);
-  animation-duration: 1.5s;
-  animation-direction: reverse;
-}
-.ring-3 {
-  width: 40px;
-  height: 40px;
-  border-top: 3px solid #dac25a;
-  border-bottom: 3px solid rgba(218, 194, 90, 0.7);
-  animation-duration: 1s;
-}
-@keyframes ring-rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-.loader-core {
-  width: 20px;
+.horizontal-loader {
+  width: 200px;
   height: 20px;
-  background: radial-gradient(circle, #dac25a 0%, rgba(218, 194, 90, 0.3) 70%);
-  border-radius: 50%;
+  background-color: rgba(218, 194, 90, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid rgba(218, 194, 90, 0.3);
   position: relative;
-  animation: core-pulse 1s ease-in-out infinite alternate;
 }
-.core-pulse {
-  width: 100%;
+.horizontal-bar {
   height: 100%;
-  background: linear-gradient(45deg, #dac25a, #f6e05e);
-  border-radius: 50%;
-  animation: pulse-glow 0.8s ease-in-out infinite;
-}
-@keyframes core-pulse {
-  0% {
-    transform: scale(0.8);
-  }
-  100% {
-    transform: scale(1.2);
-  }
-}
-@keyframes pulse-glow {
-  0% {
-    box-shadow: 0 0 5px #dac25a, 0 0 10px #dac25a, 0 0 15px #dac25a;
-    opacity: 0.7;
-  }
-  100% {
-    box-shadow: 0 0 10px #dac25a, 0 0 20px #dac25a, 0 0 30px #dac25a;
-    opacity: 1;
-  }
+  background: linear-gradient(90deg, #dac25a, #f6e05e);
+  border-radius: 10px;
+  width: 0%;
+  transition: width 0.1s ease-in-out;
+  box-shadow: 0 0 10px rgba(218, 194, 90, 0.6);
 }
 .extraordinary-timer {
   position: relative;
@@ -923,35 +850,6 @@ body {
   50% {
     opacity: 0.6;
     transform: scale(1.1);
-  }
-}
-@media (max-width: 768px) {
-  .extraordinary-loader {
-    width: 80px;
-    height: 80px;
-  }
-  .ring-1 {
-    width: 80px;
-    height: 80px;
-  }
-  .ring-2 {
-    width: 60px;
-    height: 60px;
-  }
-  .ring-3 {
-    width: 30px;
-    height: 30px;
-  }
-  .timer-value {
-    font-size: 2rem;
-  }
-  .progress-ring {
-    width: 100px;
-    height: 100px;
-  }
-  .progress-bg, .progress-bar {
-    r: 45;
-    stroke-width: 5;
   }
 }
 ::-webkit-scrollbar {
