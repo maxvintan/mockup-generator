@@ -4,8 +4,13 @@ export const colorOptions = [
   "Bright Imperial Blue (#001379)",
   "Bold Chili Red (#9F0D17)",
   "Dark Roast (#2B1B17)",
+<<<<<<< HEAD
   "Tropical Teal (#2B939A)",
   "Azure Blue (#0673C4)",
+=======
+  "Tropical Teal (#2BB3B5)",
+  "Azure Blue (#066CBA)",
+>>>>>>> c68587a7f26de36a018557f6d5bfeb02e1f55227
   "Pure White (#EDEDED)",
   "Magenta (#FF00FF)",
   "Deep Teal Green (#077C64)",
