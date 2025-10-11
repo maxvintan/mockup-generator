@@ -8,7 +8,7 @@ export const colorOptions = [
   "Azure Blue (#066CBA)",
   "Pure White (#EDEDED)",
   "Magenta (#FF00FF)",
-  "Deep Teal Green (#077C64)",
+  "Classic Kelly Green (#077C64)",
   "Midnight Blue (#111833)",
   "Vivid Burgundy (#9D0F2E)",
   "Charcoal Gray (#3A3A3A)",

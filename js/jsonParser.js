@@ -150,6 +150,147 @@ export function cleanupJsonSection(section) {
     return cleaned;
 }
 
+// Handle truncated JSON by attempting to recover partial data
+export function handleTruncatedJson(jsonText) {
+    try {
+        // Find the last complete section and truncate there
+        let cleaned = jsonText;
+
+        // First try to close any unclosed strings at the end
+        const lastOpenQuoteIndex = cleaned.lastIndexOf('"');
+        if (lastOpenQuoteIndex !== -1) {
+            // Find if there's a closing quote after this
+            const afterQuote = cleaned.substring(lastOpenQuoteIndex + 1);
+            const nextQuoteIndex = afterQuote.indexOf('"');
+
+            if (nextQuoteIndex === -1) {
+                // Unclosed string, try to fix by adding closing quote and brace
+                cleaned = cleaned + '"}';
+            }
+        }
+
+        // Try to fix structural issues
+        cleaned = fixStructuralIssues(cleaned);
+
+        // Try to complete incomplete object/array structures
+        cleaned = completeIncompleteStructure(cleaned);
+
+        // Attempt to parse the recovered JSON
+        try {
+            return JSON.parse(cleaned);
+        } catch(recoveryError) {
+            console.warn("Direct recovery failed, attempting section-by-section recovery...");
+
+            // As a last resort, try to extract complete sections
+            return recoverPartialJson(cleaned);
+        }
+
+    } catch(recoveryError) {
+        console.error("JSON truncation recovery failed:", recoveryError);
+        throw new Error("Unable to recover from truncated JSON response");
+    }
+}
+
+// Complete incomplete JSON structures
+export function completeIncompleteStructure(jsonText) {
+    let cleaned = jsonText;
+
+    // Count braces and brackets to identify what's missing
+    const openBraces = (cleaned.match(/\{/g) || []).length;
+    const closeBraces = (cleaned.match(/\}/g) || []).length;
+    const openBrackets = (cleaned.match(/\[/g) || []).length;
+    const closeBrackets = (cleaned.match(/\]/g) || []).length;
+
+    // Add missing braces/brackets at end
+    if (openBraces > closeBraces) {
+        const missing = openBraces - closeBraces;
+        cleaned += '}'.repeat(missing);
+    }
+
+    if (openBrackets > closeBrackets) {
+        const missing = openBrackets - closeBrackets;
+        cleaned += ']'.repeat(missing);
+    }
+
+    return cleaned;
+}
+
+// Recover partial JSON by extracting complete sections
+export function recoverPartialJson(jsonText) {
+    const result = {};
+    let currentObject = result;
+
+    // Split into lines and process each one
+    const lines = jsonText.split('\n').map(line => line.trim()).filter(line => line);
+
+    for (const line of lines) {
+        try {
+            // Try to match key-value pairs
+            const keyValueMatch = line.match(/"([^"]+)"\s*:\s*(.+?)(?=,|\}|$)/);
+            if (keyValueMatch) {
+                const [, key, value] = keyValueMatch;
+                try {
+                    // Try to parse the value
+                    const parsedValue = JSON.parse(value.trim());
+                    currentObject[key] = parsedValue;
+                } catch {
+                    // If value can't be parsed, store as string if it looks complete
+                    if (value.trim().startsWith('"') && value.trim().endsWith('"')) {
+                        currentObject[key] = JSON.parse(value.trim());
+                    } else if (!value.includes('"') || value.split('"').length >= 3) {
+                        // For partially truncated strings, try to clean them up
+                        let cleanedValue = value.trim();
+                        if (cleanedValue.startsWith('"') && !cleanedValue.endsWith('"')) {
+                            cleanedValue += '"'; // Add closing quote
+                        }
+                        try {
+                            currentObject[key] = JSON.parse(cleanedValue);
+                        } catch {
+                            // Skip malformed values
+                            console.warn(`Skipping malformed value for key ${key}: ${cleanedValue}`);
+                        }
+                    }
+                }
+            }
+        } catch (lineError) {
+            console.warn("Could not parse line:", line, lineError);
+        }
+    }
+
+    // If we didn't recover anything meaningful, throw error
+    if (Object.keys(result).length === 0) {
+        throw new Error("Could not recover any valid data from truncated JSON");
+    }
+
+    console.log("Recovered partial JSON:", result);
+    return result;
+}
+
+// Detect if JSON response appears to be truncated
+export function detectTruncation(jsonText) {
+    // Check if text ends with incomplete string (unclosed quote)
+    const trimmed = jsonText.trim();
+
+    // Count quotes from the end backward
+    let openQuotes = 0;
+    for (let i = trimmed.length - 1; i >= 0; i--) {
+        const char = trimmed[i];
+        if (char === '"') {
+            // Check if this quote is escaped by looking at previous character
+            if (i > 0 && trimmed[i-1] !== '\\') {
+                openQuotes++;
+            }
+        }
+        // Stop counting after finding significant closing brackets/braces
+        if (char === '}' || char === ']') {
+            break;
+        }
+    }
+
+    // If we have odd number of quotes (unclosed string), it's likely truncated
+    return openQuotes % 2 === 1;
+}
+
 // Enhanced JSON parsing with multiple fallback methods
 export function parseAIJsonResponse(jsonText) {
     if (!jsonText) throw new Error("Failed to generate valid content from the model.");
@@ -158,6 +299,8 @@ export function parseAIJsonResponse(jsonText) {
     const cleanedJsonText = jsonText.replace(/```json/g, '').replace(/```/g, '').trim();
 
     let parsedJson;
+    const isTruncated = detectTruncation(cleanedJsonText);
+
     try {
         // First attempt: direct parsing
         parsedJson = JSON.parse(cleanedJsonText);
@@ -170,7 +313,19 @@ export function parseAIJsonResponse(jsonText) {
         } catch(repairError) {
             console.error("Failed to parse JSON after repair attempt:", cleanedJsonText);
             console.error("Repair error:", repairError.message);
-            throw new Error("The model returned invalid JSON that could not be parsed. Please try again with a different model or prompt.");
+
+            if (isTruncated) {
+                // Special handling for truncated JSON
+                console.warn("Detected truncated JSON response, attempting recovery...");
+                try {
+                    parsedJson = handleTruncatedJson(cleanedJsonText);
+                } catch(truncationError) {
+                    console.error("Truncation recovery failed:", truncationError);
+                    throw new Error("The model's response appears to be truncated/incomplete. This often happens with longer responses or token limits. Try using a model with higher context limits, shortening your prompt details, or generating again.");
+                }
+            } else {
+                throw new Error("The model returned invalid JSON that could not be parsed. Please try again with a different model or prompt.");
+            }
         }
     }
 
