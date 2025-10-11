@@ -198,11 +198,8 @@ function startExtraordinaryTimer() {
         // Update animated timer value
         timerValue.textContent = elapsed;
 
-        // Update horizontal bar (fills over 60 seconds)
-        if (DOMElements.horizontalBar) {
-            const progress = Math.min((elapsed / 60) * 100, 100);
-            DOMElements.horizontalBar.style.width = `${progress}%`;
-        }
+        // Street Fighter Power Gauge System
+        updatePowerGaugeLayers(elapsed);
 
     }, 100);
 }
@@ -217,12 +214,69 @@ function stopExtraordinaryTimer() {
         timerProgressInterval = null;
     }
 
-    // Reset horizontal bar
-    if (DOMElements.horizontalBar) {
-        DOMElements.horizontalBar.style.width = '0%';
-    }
+    // Reset all power gauge layers
+    resetPowerGaugeLayers();
 
     generationStartTime = null;
+}
+
+// --- STREET FIGHTER POWER GAUGE SYSTEM ---
+function updatePowerGaugeLayers(elapsed) {
+    // Define layer timing intervals (in seconds)
+    const layerIntervals = [60, 120, 180, 240]; // 4 layers covering up to 240+ seconds
+
+    // Get all power layer elements
+    const layer1 = document.querySelector('.power-layer-1');
+    const layer2 = document.querySelector('.power-layer-2');
+    const layer3 = document.querySelector('.power-layer-3');
+    const layer4 = document.querySelector('.power-layer-4');
+
+    if (!layer1) return;
+
+    // Layer 1: 0-60 seconds (Golden Yellow)
+    if (elapsed <= layerIntervals[0]) {
+        const progress1 = (elapsed / layerIntervals[0]) * 100;
+        layer1.style.width = `${Math.min(progress1, 100)}%`;
+        layer2.style.width = '0%';
+        layer3.style.width = '0%';
+        layer4.style.width = '0%';
+    }
+    // Layer 2: 60-120 seconds (Orange)
+    else if (elapsed <= layerIntervals[1]) {
+        layer1.style.width = '100%'; // Keep first layer full
+        const progress2 = ((elapsed - layerIntervals[0]) / (layerIntervals[1] - layerIntervals[0])) * 100;
+        layer2.style.width = `${Math.min(progress2, 100)}%`;
+        layer3.style.width = '0%';
+        layer4.style.width = '0%';
+    }
+    // Layer 3: 120-180 seconds (Red)
+    else if (elapsed <= layerIntervals[2]) {
+        layer1.style.width = '100%';
+        layer2.style.width = '100%';
+        const progress3 = ((elapsed - layerIntervals[1]) / (layerIntervals[2] - layerIntervals[1])) * 100;
+        layer3.style.width = `${Math.min(progress3, 100)}%`;
+        layer4.style.width = '0%';
+    }
+    // Layer 4: 180-240+ seconds (Dark Red)
+    else {
+        layer1.style.width = '100%';
+        layer2.style.width = '100%';
+        layer3.style.width = '100%';
+        const progress4 = ((elapsed - layerIntervals[2]) / (layerIntervals[3] - layerIntervals[2])) * 100;
+        layer4.style.width = `${Math.min(progress4, 100)}%`;
+    }
+}
+
+function resetPowerGaugeLayers() {
+    const layer1 = document.querySelector('.power-layer-1');
+    const layer2 = document.querySelector('.power-layer-2');
+    const layer3 = document.querySelector('.power-layer-3');
+    const layer4 = document.querySelector('.power-layer-4');
+
+    if (layer1) layer1.style.width = '0%';
+    if (layer2) layer2.style.width = '0%';
+    if (layer3) layer3.style.width = '0%';
+    if (layer4) layer4.style.width = '0%';
 }
 
 function updateDisplayedModels() {

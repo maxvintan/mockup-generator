@@ -7,6 +7,9 @@
   "description": "A sophisticated web-based mockup prompt generator for fashion and accessory design. Create AI-powered design prompts with customizable colors, aesthetics, countries, designers, and creative modes. Features advanced AI model selection through OpenRouter API with intelligent filtering and cost estimation.",
   "main": "index.js",
   "scripts": {
+    "build:css": "npx @tailwindcss/cli -i css/input.css -o css/output.css --minify",
+    "watch:css": "npx @tailwindcss/cli -i css/input.css -o css/output.css --watch",
+    "dev:css": "npx @tailwindcss/cli -i css/input.css -o css/output.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
