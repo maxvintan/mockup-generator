@@ -19,7 +19,7 @@ export const colorOptions = [
   "Rich Burgundy (#380D13)",
   "Regal Purple (#371141)",
   "Aubergine (#28121E)",
-  "Army Green (#282B17)",
+  "Dark Army Green (#171911)",
   "Deep Crimson (#571B1C)",
   "Warm Off-White (#FAF9F6)",
   "Neon Orange (#EB3F11)",
