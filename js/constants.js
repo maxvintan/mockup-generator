@@ -49,6 +49,8 @@ export const colorOptions = [
   "Fuchsia Pink (#B5486B)",
   "Morning Sky Blue (#A2EBFF)",
   "Khaki Beige (#A99C8C)",
+  "Copper Blush (#C89F82)",
+  "Dusty Pink (#B97880)",
 ];
 
 export const aesthetics = [
