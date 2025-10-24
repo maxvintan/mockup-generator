@@ -4,6 +4,14 @@ import { apiService } from './apiService.js';
 import { buildPromptContext, buildPrompts, formatThemeNameForFile, copyToClipboard } from './utils.js';
 import { parseAIJsonResponse } from './jsonParser.js';
 
+const exactoModels = [
+    "moonshotai/kimi-k2-0905",
+    "deepseek/deepseek-v3.1-terminus",
+    "z-ai/glm-4.6",
+    "openai/gpt-oss-120b",
+    "qwen/qwen3-coder"
+];
+
 // --- COST ESTIMATION ---
 // --- COST ESTIMATION ---
 function estimateGenerationCost(model, inputTokens = 20000, outputTokens = 5000) {
@@ -51,6 +59,8 @@ function renderModelCards(models, containerId) {
         if (model.pricing?.prompt === "0" && model.pricing?.completion === "0") capabilitiesHTML.push('<span class="capability-tag bg-gray-500 text-white">free</span>');
         if (model.capabilities.vision) capabilitiesHTML.push('<span class="capability-tag bg-blue-500 text-white">vision</span>');
         if (model.capabilities.tools) capabilitiesHTML.push('<span class="capability-tag bg-green-500 text-white">tools</span>');
+
+        if (exactoModels.includes(model.id)) capabilitiesHTML.push('<span class="capability-tag bg-purple-500 text-white">exacto</span>');
 
         // Normalize pricing to $/M tokens (multiply by 1,000,000 since API returns $/token)
         const inputPrice = (Number(model.pricing?.prompt) || 0) * 1000000;

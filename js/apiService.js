@@ -110,8 +110,16 @@ export const apiService = {
     async _callOpenRouter(systemPrompt, userPrompt, apiKey, modelId) {
         return this._callApiWithRetry(async () => {
             const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
+            const exactoModels = [
+                "moonshotai/kimi-k2-0905",
+                "deepseek/deepseek-v3.1-terminus",
+                "z-ai/glm-4.6",
+                "openai/gpt-oss-120b",
+                "qwen/qwen3-coder"
+            ];
+            const modelToUse = exactoModels.includes(modelId) ? `${modelId}:exacto` : modelId;
             const payload = {
-                model: modelId, // Use the selected model ID here
+                model: modelToUse, // Use the selected model ID here
                 messages: [
                     { role: "system", content: systemPrompt },
                     { role: "user", content: userPrompt }
